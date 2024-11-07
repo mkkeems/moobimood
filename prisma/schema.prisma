@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String        @id @default(cuid())
+  email     String        @unique
+  firstName String?
+  lastName  String?
+  nickname  String        @unique
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  reviews   MovieReview[]
+}
+
+model Movies {
+  id            String        @id @default(cuid())
+  originalTitle String
+  releaseDate   DateTime
+  runtime       Int
+  posterPath    String
+  imdbId        String
+  releaseYear   Int
+  genre         String
+  overview      String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  reviews       MovieReview[]
+}
+
+model MovieReviewCategory {
+  id          String                @id @default(cuid())
+  name        String
+  description String?
+  questions   MovieReviewQuestion[]
+}
+
+model MovieReviewQuestion {
+  id         String                      @id @default(cuid())
+  question   String
+  categoryId String
+  category   MovieReviewCategory         @relation(fields: [categoryId], references: [id])
+  responses  MovieReviewResponseOption[]
+  answers    MovieReviewAnswer[]
+}
+
+model MovieReviewResponseOption {
+  id                String              @id @default(cuid())
+  questionId        String
+  question          MovieReviewQuestion @relation(fields: [questionId], references: [id])
+  optionText        String
+  MovieReviewAnswer MovieReviewAnswer[]
+}
+
+model MovieReview {
+  id           String                   @id @default(cuid())
+  movieId      String
+  movie        Movies                   @relation(fields: [movieId], references: [id])
+  userId       String
+  user         User                     @relation(fields: [userId], references: [id])
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  answers      MovieReviewAnswer[]
+  finalVerdict MovieReviewFinalVerdict?
+}
+
+model MovieReviewAnswer {
+  id               String                     @id @default(cuid())
+  reviewId         String
+  review           MovieReview                @relation(fields: [reviewId], references: [id])
+  questionId       String
+  question         MovieReviewQuestion        @relation(fields: [questionId], references: [id])
+  selectedOptionId String?
+  selectedOption   MovieReviewResponseOption? @relation(fields: [selectedOptionId], references: [id])
+  preference       PreferenceType // "Amazing👍/Horrible👎/Don't care🤷" about this aspect
+}
+
+model MovieReviewFinalVerdict {
+  id                 String         @id @default(cuid())
+  reviewId           String         @unique
+  review             MovieReview    @relation(fields: [reviewId], references: [id])
+  overallOpinion     OverallOpinion // (Masterpiece, Meh, Garbage)
+  moodTags           String[]
+  additionalComments String? // Optional long text response for additional comments
+}
+
+enum PreferenceType {
+  YES
+  NO
+  DONT_CARE
+}
+
+enum OverallOpinion {
+  MASTERPIECE
+  MEH
+  GARBAGE
+}
