@@ -18,7 +18,7 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "Movies" (
+CREATE TABLE "Movie" (
     "id" TEXT NOT NULL,
     "originalTitle" TEXT NOT NULL,
     "releaseDate" TIMESTAMP(3) NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE "Movies" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Movies_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Movie_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -110,7 +110,7 @@ ALTER TABLE "MovieReviewQuestion" ADD CONSTRAINT "MovieReviewQuestion_categoryId
 ALTER TABLE "MovieReviewResponseOption" ADD CONSTRAINT "MovieReviewResponseOption_questionId_fkey" FOREIGN KEY ("questionId") REFERENCES "MovieReviewQuestion"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "MovieReview" ADD CONSTRAINT "MovieReview_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "Movies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "MovieReview" ADD CONSTRAINT "MovieReview_movieId_fkey" FOREIGN KEY ("movieId") REFERENCES "Movie"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "MovieReview" ADD CONSTRAINT "MovieReview_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

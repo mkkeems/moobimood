@@ -24,7 +24,7 @@ model User {
   reviews   MovieReview[]
 }
 
-model Movies {
+model Movie {
   id            String        @id @default(cuid())
   originalTitle String
   releaseDate   DateTime
@@ -66,7 +66,7 @@ model MovieReviewResponseOption {
 model MovieReview {
   id           String                   @id @default(cuid())
   movieId      String
-  movie        Movies                   @relation(fields: [movieId], references: [id])
+  movie        Movie                    @relation(fields: [movieId], references: [id])
   userId       String
   user         User                     @relation(fields: [userId], references: [id])
   createdAt    DateTime                 @default(now())
