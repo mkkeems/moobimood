@@ -59,6 +59,8 @@ model MovieReviewQuestion {
   category             MovieReviewQuestionCategory         @relation(fields: [categoryId], references: [id])
   options              MovieReviewQuestionResponseOption[]
   movieReviewResponses MovieReviewResponse[]
+
+  @@unique([question, categoryId])
 }
 
 // the multiple choice options for a question
@@ -68,6 +70,8 @@ model MovieReviewQuestionResponseOption {
   question             MovieReviewQuestion   @relation(fields: [questionId], references: [id])
   optionText           String
   movieReviewResponses MovieReviewResponse[]
+
+  @@unique([optionText, questionId])
 }
 
 // review submitted by a user
