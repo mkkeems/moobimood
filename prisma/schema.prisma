@@ -55,6 +55,7 @@ model MovieReviewQuestionCategory {
 model MovieReviewQuestion {
   id                   String                              @id @default(cuid())
   question             String
+  topic                String
   categoryId           String
   category             MovieReviewQuestionCategory         @relation(fields: [categoryId], references: [id])
   options              MovieReviewQuestionResponseOption[]

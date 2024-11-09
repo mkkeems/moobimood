@@ -5,7 +5,8 @@ export const movieReviewQuestionByCategoryData = [
       "The storyline's originality, engagement, and character development.",
     questions: [
       {
-        question: "Originality: Was the plot unique or predictable?",
+        topic: "Originality",
+        question: "Was the plot unique or predictable?",
         responseOptions: [
           { optionText: "Unique and fresh" },
           { optionText: "Somewhat original" },
@@ -14,6 +15,7 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Character Development",
         question:
           "Were the characters well-developed and their arcs satisfying?",
         responseOptions: [
@@ -24,6 +26,7 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Plot Twists",
         question: "Were there unexpected twists or turns?",
         responseOptions: [
           { optionText: "Mind-blowing twists" },
@@ -33,8 +36,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Dialogue: Was the dialogue natural, engaging, or did it feel forced?",
+        topic: "Dialogue",
+        question: "Was the dialogue natural, engaging, or did it feel forced?",
         responseOptions: [
           { optionText: "Natural and engaging" },
           { optionText: "Good but occasionally forced" },
@@ -43,8 +46,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Complexity: Was the plot straightforward or layered and complex?",
+        topic: "Complexity",
+        question: "Was the plot straightforward or layered and complex?",
         responseOptions: [
           { optionText: "Multi-layered and complex" },
           { optionText: "Easy to follow, but with depth" },
@@ -53,8 +56,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Emotional Impact: Did the plot evoke strong emotions (joy, sadness, tension)?",
+        topic: "Emotional Impact",
+        question: "Did the plot evoke strong emotions (joy, sadness, tension)?",
         responseOptions: [
           { optionText: "Deeply moving" },
           { optionText: "Good emotional moments" },
@@ -63,8 +66,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Theme: Did the movie successfully convey its message or theme?",
+        topic: "Theme",
+        question: "Did the movie successfully convey its message or theme?",
         responseOptions: [
           { optionText: "Strong thematic message" },
           { optionText: "Subtle, but present" },
@@ -79,8 +82,9 @@ export const movieReviewQuestionByCategoryData = [
     description: "Evaluation of the movie's pacing and duration fit.",
     questions: [
       {
+        topic: "Overall Pacing",
         question:
-          "Overall Pacing: Did the movie maintain a consistent pace, or did it feel rushed or dragged out in certain parts?",
+          "Did the movie maintain a consistent pace, or did it feel rushed or dragged out in certain parts?",
         responseOptions: [
           { optionText: "Smooth and consistent pacing" },
           { optionText: "Mostly consistent, but some uneven moments" },
@@ -89,8 +93,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Scene Transitions: Were transitions between scenes smooth or jarring?",
+        topic: "Scene Transitions",
+        question: "Were transitions between scenes smooth or jarring?",
         responseOptions: [
           { optionText: "Seamless transitions" },
           { optionText: "Mostly smooth transitions" },
@@ -99,8 +103,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Scene Density: Were scenes drawn out, or packed with content?",
+        topic: "Scene Density",
+        question: "Were scenes drawn out, or packed with content?",
         responseOptions: [
           { optionText: "Packed with content" },
           { optionText: "Good density but uneven" },
@@ -109,8 +113,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Runtime Fit",
         question:
-          "Runtime Fit: Did the movie's length feel right for the story it was telling?",
+          "Did the movie's length feel right for the story it was telling?",
         responseOptions: [
           { optionText: "Perfectly suited for the story" },
           { optionText: "Good, but a little too long or too short" },
@@ -125,8 +130,8 @@ export const movieReviewQuestionByCategoryData = [
     description: "Aspects related to the movie's soundtrack and audio effects.",
     questions: [
       {
-        question:
-          "Score Quality and Memorability: Was the original score memorable and fitting for the film?",
+        topic: "Score Quality and Memorability",
+        question: "Was the original score memorable and fitting for the film?",
         responseOptions: [
           { optionText: "Iconic and perfectly suited" },
           { optionText: "Good, but doesn’t stand out" },
@@ -135,8 +140,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Song Selection and Mood",
         question:
-          "Song Selection and Mood: Did the soundtrack match and enhance the mood of the scenes?",
+          "Did the soundtrack match and enhance the mood of the scenes?",
         responseOptions: [
           { optionText: "Perfect song choices" },
           { optionText: "Mostly fitting" },
@@ -145,8 +151,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Ambient Sounds and Sound Effects",
         question:
-          "Ambient Sounds and Sound Effects: Did the ambient sounds and effects help pull you into the movie and add to the vibe?",
+          "Did the ambient sounds and effects help pull you into the movie and add to the vibe?",
         responseOptions: [
           { optionText: "Completely immersive, made it feel real" },
           { optionText: "Subtle but added to the mood" },
@@ -155,8 +162,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Use of Silence",
         question:
-          "Use of Silence: Did the absence of music make certain moments more impactful?",
+          "Did the absence of music make certain moments more impactful?",
         responseOptions: [
           { optionText: "Effective use of silence" },
           { optionText: "Balanced with soundtrack" },
@@ -172,8 +180,9 @@ export const movieReviewQuestionByCategoryData = [
       "The aesthetic and visual elements, including cinematography and lighting.",
     questions: [
       {
+        topic: "Camera Work",
         question:
-          "Camera Work: Were interesting or creative camera angles and movements used?",
+          "Were interesting or creative camera angles and movements used?",
         responseOptions: [
           { optionText: "Creative and dynamic use of the camera" },
           { optionText: "Generally effective, with some unique shots" },
@@ -182,8 +191,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Shot Composition: Did the framing of shots add meaning or beauty?",
+        topic: "Shot Composition",
+        question: "Did the framing of shots add meaning or beauty?",
         responseOptions: [
           { optionText: "Beautifully composed shots" },
           { optionText: "Good framing, nothing special" },
@@ -192,8 +201,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Lighting and Shadows: Did lighting enhance the visual tone and mood?",
+        topic: "Lighting and Shadows",
+        question: "Did lighting enhance the visual tone and mood?",
         responseOptions: [
           { optionText: "Masterful use of lighting" },
           { optionText: "Good but uneven lighting" },
@@ -202,8 +211,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Color & Mood Creation",
         question:
-          "Color & Mood Creation: How well did the color scheme contribute to the mood of the film?",
+          "How well did the color scheme contribute to the mood of the film?",
         responseOptions: [
           { optionText: "Colors effectively enhanced mood" },
           { optionText: "Good mood setting" },
@@ -212,7 +222,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question: "Symbolism: Did colors represent certain themes or emotions?",
+        topic: "Symbolism",
+        question: "Did colors represent certain themes or emotions?",
         responseOptions: [
           { optionText: "Colors carried symbolic meaning" },
           { optionText: "Some symbolic use" },
@@ -221,7 +232,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question: "Aesthetic Appeal: Was the film visually appealing overall?",
+        topic: "Aesthetic Appeal",
+        question: "Was the film visually appealing overall?",
         responseOptions: [
           { optionText: "Absolutely visually stunning" },
           { optionText: "Solid but not remarkable" },
@@ -237,8 +249,8 @@ export const movieReviewQuestionByCategoryData = [
       "Authenticity and appeal of the movie's setting and locations.",
     questions: [
       {
-        question:
-          "Setting Realism: Did the location feel authentic to the story’s context?",
+        topic: "Setting Realism",
+        question: "Did the location feel authentic to the story’s context?",
         responseOptions: [
           { optionText: "Completely believeable setting" },
           { optionText: "Mostly realistic" },
@@ -247,8 +259,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Cultural Relevance",
         question:
-          "Cultural Relevance: Did the setting add cultural or thematic depth to the story?",
+          "Did the setting add cultural or thematic depth to the story?",
         responseOptions: [
           { optionText: "Perfectly matched and meaningful" },
           { optionText: "Mostly relevant with some depth" },
@@ -257,8 +270,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Scenic Appeal: Was the location visually striking or memorable?",
+        topic: "Scenic Appeal",
+        question: "Was the location visually striking or memorable?",
         responseOptions: [
           { optionText: "Stunning and memorable" },
           { optionText: "Scenic but forgettable" },
@@ -267,8 +280,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Use of Environment",
         question:
-          "Use of Environment: Did the movie make effective use of the location in the story?",
+          "Did the movie make effective use of the location in the story?",
         responseOptions: [
           { optionText: "Clever and immersive use of environment" },
           { optionText: "Good but not outstanding" },
@@ -283,8 +297,8 @@ export const movieReviewQuestionByCategoryData = [
     description: "Quality and chemistry of the cast's performances.",
     questions: [
       {
-        question:
-          "Casting Choices: Were the actors well-suited for their roles?",
+        topic: "Casting Choices",
+        question: "Were the actors well-suited for their roles?",
         responseOptions: [
           { optionText: "Perfect cast for each role" },
           { optionText: "Mostly well-cast" },
@@ -293,8 +307,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Performance Consistency: Were performances consistent throughout the film?",
+        topic: "Performance Consistency",
+        question: "Were performances consistent throughout the film?",
         responseOptions: [
           { optionText: "Consistently strong performances" },
           { optionText: "Mostly good with a few weak spots" },
@@ -303,8 +317,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Star Power vs. Character Fit: Did famous actors enhance or distract from the story?",
+        topic: "Star Power vs. Character Fit",
+        question: "Did famous actors enhance or distract from the story?",
         responseOptions: [
           { optionText: "Big names fit their roles perfectly" },
           { optionText: "Well-known actors, mostly fitting" },
@@ -313,8 +327,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Cast Chemistry: Did the cast’s interactions feel natural and engaging?",
+        topic: "Cast Chemistry",
+        question: "Did the cast’s interactions feel natural and engaging?",
         responseOptions: [
           { optionText: "Lively, dynamic interactions" },
           { optionText: "Good but not outstanding" },
@@ -323,8 +337,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Believability",
         question:
-          "Believability: Did the relationships between characters feel authentic and enhance emotional scenes?",
+          "Did the relationships between characters feel authentic and enhance emotional scenes?",
         responseOptions: [
           { optionText: "Completely authentic with strong emotional impact" },
           { optionText: "Mostly convincing and moving" },
@@ -339,8 +354,9 @@ export const movieReviewQuestionByCategoryData = [
     description: "The production value and overall polish of the movie.",
     questions: [
       {
+        topic: "Production Quality",
         question:
-          "Production Quality: How would you rate the overall quality and polish of the production?",
+          "How would you rate the overall quality and polish of the production?",
         responseOptions: [
           { optionText: "High-quality production" },
           { optionText: "Good but not excellent" },
@@ -349,8 +365,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Budget Use: Did the movie feel like it made good use of its budget?",
+        topic: "Budget Use",
+        question: "Did the movie feel like it made good use of its budget?",
         responseOptions: [
           { optionText: "Excellent use of budget" },
           { optionText: "Good but uneven spending" },
@@ -359,8 +375,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Studio Signature",
         question:
-          "Studio Signature: Was there a noticeable signature style of the production company?",
+          "Was there a noticeable signature style of the production company?",
         responseOptions: [
           { optionText: "Signature studio style enhanced the film" },
           { optionText: "Recognizable studio influence" },
@@ -375,8 +392,8 @@ export const movieReviewQuestionByCategoryData = [
     description: "The movie's tone, atmosphere, and emotional resonance.",
     questions: [
       {
-        question:
-          "Atmosphere: Did the movie successfully create an immersive atmosphere?",
+        topic: "Atmosphere",
+        question: "Did the movie successfully create an immersive atmosphere?",
         responseOptions: [
           { optionText: "Completely immersive atmosphere" },
           { optionText: "Mostly atmospheric" },
@@ -385,8 +402,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Tone Consistency",
         question:
-          "Tone Consistency: Was the tone (dark, light, serious, comedic) consistent throughout?",
+          "Was the tone (dark, light, serious, comedic) consistent throughout?",
         responseOptions: [
           { optionText: "Consistent tone throughout" },
           { optionText: "Mostly consistent" },
@@ -395,8 +413,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Emotional Resonance",
         question:
-          "Emotional Resonance: Did the movie evoke strong emotions (joy, sadness, tension)?",
+          "Did the movie evoke strong emotions (joy, sadness, tension)?",
         responseOptions: [
           { optionText: "Deep emotional impact" },
           { optionText: "Good emotional moments" },
@@ -405,8 +424,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Energy Levels: Was the movie's pacing and intensity engaging?",
+        topic: "Energy Levels",
+        question: "Was the movie's pacing and intensity engaging?",
         responseOptions: [
           { optionText: "High energy and engaging throughout" },
           { optionText: "Mostly engaging energy" },
@@ -422,8 +441,9 @@ export const movieReviewQuestionByCategoryData = [
       "How well the movie aligns with or innovates within its genre.",
     questions: [
       {
+        topic: "Genre Fidelity",
         question:
-          "Genre Fidelity: Did the movie stick to its genre (e.g., action, horror, romance)?",
+          "Did the movie stick to its genre (e.g., action, horror, romance)?",
         responseOptions: [
           { optionText: "Stayed true to the genre" },
           { optionText: "Mostly aligned with the genre" },
@@ -432,8 +452,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Sub-genre Blend",
         question:
-          "Sub-genre Blend: Did it effectively mix genres (e.g., comedy-drama, horror-thriller)?",
+          "Did it effectively mix genres (e.g., comedy-drama, horror-thriller)?",
         responseOptions: [
           { optionText: "Perfect mix of genres" },
           { optionText: "Good genre blend" },
@@ -442,8 +463,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Genre Innovation: Did the movie offer a fresh take on its genre?",
+        topic: "Genre Innovation",
+        question: "Did the movie offer a fresh take on its genre?",
         responseOptions: [
           { optionText: "Fresh take on the genre" },
           { optionText: "Good but typical" },
@@ -458,8 +479,8 @@ export const movieReviewQuestionByCategoryData = [
     description: "Accuracy and respect in cultural or historical portrayal.",
     questions: [
       {
-        question:
-          "Cultural Authenticity: Did the movie accurately reflect its cultural setting?",
+        topic: "Cultural Authenticity",
+        question: "Did the movie accurately reflect its cultural setting?",
         responseOptions: [
           { optionText: "Deeply authentic and respectful" },
           { optionText: "Mostly fitting with minor issues" },
@@ -468,8 +489,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Historical Accuracy",
         question:
-          "Historical Accuracy: For period films, how accurate was the historical depiction?",
+          "For period films, how accurate was the historical depiction?",
         responseOptions: [
           { optionText: "Extremely accurate" },
           { optionText: "Mostly accurate" },
@@ -478,8 +500,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Timelessness & Relevance: Did the movie’s themes feel relevant or outdated?",
+        topic: "Timelessness & Relevance",
+        question: "Did the movie’s themes feel relevant or outdated?",
         responseOptions: [
           { optionText: "Felt timeless" },
           { optionText: "Mostly relevant with some outdated aspects" },
@@ -488,8 +510,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Language Authenticity",
         question:
-          "Language Authenticity: Did the use of language enhance the cultural setting of the film?",
+          "Did the use of language enhance the cultural setting of the film?",
         responseOptions: [
           { optionText: "Enhanced cultural authenticity" },
           { optionText: "Mostly fitting" },
@@ -505,8 +528,9 @@ export const movieReviewQuestionByCategoryData = [
       "Consistency and immersion in the movie's universe or franchise.",
     questions: [
       {
+        topic: "World-Building",
         question:
-          "World-Building: How well was the movie's universe (real or fictional) established?",
+          "How well was the movie's universe (real or fictional) established?",
         responseOptions: [
           { optionText: "Fully immersive and detailed" },
           { optionText: "Mostly immersive with minor gaps" },
@@ -515,8 +539,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Multiverse/Franchise Cohesion",
         question:
-          "Multiverse/Franchise Cohesion: Did the movie fit well within a larger universe (if applicable)?",
+          "Did the movie fit well within a larger universe (if applicable)?",
         responseOptions: [
           { optionText: "Perfect fit within the multiverse" },
           { optionText: "Mostly cohesive with some loose ends" },
@@ -525,8 +550,8 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
-        question:
-          "Easter Eggs & Crossovers: Were there crossovers or references that added value?",
+        topic: "Easter Eggs & Crossovers",
+        question: "Were there crossovers or references that added value?",
         responseOptions: [
           { optionText: "Clever and valuable references throughout" },
           { optionText: "Some good Easter eggs" },
@@ -535,8 +560,9 @@ export const movieReviewQuestionByCategoryData = [
         ],
       },
       {
+        topic: "Standalone Appeal",
         question:
-          "Standalone Appeal: Could the movie stand alone, or did it rely on outside context?",
+          "Could the movie stand alone, or did it rely on outside context?",
         responseOptions: [
           { optionText: "Excellent as a standalone film" },
           { optionText: "Mostly works but needs some background" },

@@ -25,6 +25,7 @@ async function seed() {
       if (!question) {
         question = await prisma.movieReviewQuestion.create({
           data: {
+            topic: questionData.topic,
             question: questionData.question,
             categoryId: category.id,
           },
@@ -55,7 +56,7 @@ async function seed() {
 
 seed()
   .then(() => console.log("Seed data inserted successfully"))
-  .catch((e) => console.error("Error seeding data", e))
+  .catch((err) => console.error("Error seeding data", err))
   .finally(async () => {
     await prisma.$disconnect();
   });
