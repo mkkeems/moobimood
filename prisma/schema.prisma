@@ -17,9 +17,8 @@ model User {
   id                  String               @id @default(cuid())
   email               String               @unique
   password            String? // null if user signed up via Google
-  firstName           String?
-  lastName            String?
-  nickname            String               @unique
+  displayName         String?
+  username            String               @unique
   googleId            String?              @unique
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
