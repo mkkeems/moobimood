@@ -16,14 +16,14 @@ datasource db {
 model User {
   id                  String               @id @default(cuid())
   email               String               @unique
-  password            String? // null if user signed up via OAuth
+  password            String? // null if user signed up via Google
   firstName           String?
   lastName            String?
   nickname            String               @unique
+  googleId            String?              @unique
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   authProvider        AuthProvider         @default(BASIC)
-  providerId          String? // Google or other provider’s user ID
   movieReviews        MovieReview[]
   movieStandoutScenes MovieStandoutScene[]
   movieStandoutQuotes MovieStandoutQuote[]
