@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { signupUserAction } from "./signupUserAction";
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 
 export type SignupFormValues = z.infer<typeof SignupFormSchema>;
 
@@ -84,6 +85,7 @@ const SignupForm = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <GoogleSignInButton redirectPath="/" />
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <FormField
