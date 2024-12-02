@@ -85,7 +85,7 @@ const SignupForm = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <GoogleSignInButton redirectPath="/" />
+        <GoogleSignInButton />
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <FormField
