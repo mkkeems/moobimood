@@ -1,22 +1,14 @@
+import { generateGoogleUrl } from "@/lib/google/generateGoogleUrl";
 import { Button } from "./ui/button";
-import queryString from "query-string";
 import { Icons } from "./ui/icons";
-import { generateCSRFToken } from "@/utils/generateCSRFToken";
 
 export const GoogleSignInButton = () => {
-  const handleGoogleSignIn = () => {
-    const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
-
-    const options = {
-      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-      response_type: "code",
-      scope: ["openid", "email", "profile"].join(" "),
-      redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI!,
-      state: generateCSRFToken(),
-    };
-
-    const url = `${rootUrl}?${queryString.stringify(options)}`;
-    window.location.href = url; // Redirect to Google OAuth2
+  const handleGoogleSignIn = async () => {
+    const googleUrlWithToken = await generateGoogleUrl();
+    // const response = await fetch(googleUrlWithToken);
+    // console.log(response, response.json());
+    // const { redirectUrl } = await response.json();
+    window.location.href = googleUrlWithToken;
   };
 
   return (
