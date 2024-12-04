@@ -49,7 +49,7 @@ const SignupForm = () => {
     if (result.success) {
       /**
        * TODO:
-       * On signup success, add session + redirect to dashboard
+       * - On signup success, add session + redirect to previous page
        */
       console.log("user created! great success");
     } else {
