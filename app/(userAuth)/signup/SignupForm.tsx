@@ -11,7 +11,7 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { SignupFormSchema } from "./signupFormSchema";
+import { signupFormSchema } from "./signupFormSchema";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,15 +25,15 @@ import {
 import Link from "next/link";
 import { signupUserAction } from "./signupUserAction";
 
-export type SignupFormValues = z.infer<typeof SignupFormSchema>;
+export type SignupFormValues = z.infer<typeof signupFormSchema>;
 
 function isKeyOfSignupFormValues(key: string): key is keyof SignupFormValues {
-  return key in SignupFormSchema.shape;
+  return key in signupFormSchema.shape;
 }
 
 const SignupForm = () => {
   const form = useForm<SignupFormValues>({
-    resolver: zodResolver(SignupFormSchema),
+    resolver: zodResolver(signupFormSchema),
     defaultValues: {
       email: "",
       password: "",

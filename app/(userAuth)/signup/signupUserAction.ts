@@ -1,9 +1,9 @@
 "use server";
 
-import { SignupFormSchema } from "./signupFormSchema";
+import { signupFormSchema } from "./signupFormSchema";
 import { SignupFormValues } from "./SignupForm";
 import { createUser, getUserByEmail, getUserByUsername } from "@/db/user";
-import { hashPassword } from "@/lib/hashPassword";
+import { hashPassword } from "@/lib/password";
 
 type SignupUserActionResult = {
   success: boolean;
@@ -14,7 +14,7 @@ type SignupUserActionResult = {
 export const signupUserAction = async (
   data: SignupFormValues
 ): Promise<SignupUserActionResult> => {
-  const result = SignupFormSchema.safeParse(data);
+  const result = signupFormSchema.safeParse(data);
 
   if (!result.success) {
     return {
@@ -32,8 +32,8 @@ export const signupUserAction = async (
     };
   }
 
-  const nickNameExists = await getUserByUsername(data.username);
-  if (nickNameExists) {
+  const usernameExists = await getUserByUsername(data.username);
+  if (usernameExists) {
     return {
       success: false,
       error: "Username already in use",

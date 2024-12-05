@@ -23,9 +23,16 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { loginUserAction } from "./loginUserAction";
+
+export type LoginFormValues = z.infer<typeof loginFormSchema>;
+
+function isKeyOfSignupFormValues(key: string): key is keyof LoginFormValues {
+  return key in loginFormSchema.shape;
+}
 
 const SignUpForm = () => {
-  const form = useForm<z.infer<typeof loginFormSchema>>({
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",
@@ -33,8 +40,38 @@ const SignUpForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
-    console.log(values);
+  const { handleSubmit, control, setError, setFocus } = form;
+
+  const onSubmit = async (values: LoginFormValues) => {
+    const result = await loginUserAction(values);
+    if (result.success) {
+      /**
+       * TODO:
+       * On login success, add session + redirect to dashboard
+       */
+      console.log("login works! great success");
+    } else {
+      if (result.fieldErrors) {
+        Object.entries(result.fieldErrors).forEach(
+          ([field, message], index) => {
+            if (isKeyOfSignupFormValues(field)) {
+              setError(field, {
+                type: "manual",
+                message,
+              });
+
+              if (index === 0) {
+                setFocus(field);
+              }
+            }
+          }
+        );
+      } else {
+        if (result.error) {
+          console.error(result.error);
+        }
+      }
+    }
   };
 
   return (
@@ -45,9 +82,9 @@ const SignUpForm = () => {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <FormField
-              control={form.control}
+              control={control}
               name="email"
               render={({ field }) => (
                 <FormItem>
@@ -63,7 +100,7 @@ const SignUpForm = () => {
               )}
             />
             <FormField
-              control={form.control}
+              control={control}
               name="password"
               render={({ field }) => (
                 <FormItem>
