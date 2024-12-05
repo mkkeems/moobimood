@@ -31,7 +31,7 @@ function isKeyOfSignupFormValues(key: string): key is keyof LoginFormValues {
   return key in loginFormSchema.shape;
 }
 
-const SignUpForm = () => {
+const LoginForm = () => {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -130,4 +130,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default LoginForm;
