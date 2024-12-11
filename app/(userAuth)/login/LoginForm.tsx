@@ -42,7 +42,7 @@ const LoginForm = () => {
 
   const { handleSubmit, control, setError, setFocus } = form;
 
-  const onSubmit = async (values: LoginFormValues) => {
+  const onSubmit = handleSubmit(async (values: LoginFormValues) => {
     const result = await loginUserAction(values);
     if (result.success) {
       /**
@@ -72,7 +72,7 @@ const LoginForm = () => {
         }
       }
     }
-  };
+  });
 
   return (
     <Card className="w-[350px]">
@@ -82,7 +82,7 @@ const LoginForm = () => {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={onSubmit} className="space-y-8">
             <FormField
               control={control}
               name="email"
