@@ -16,11 +16,13 @@ datasource db {
 model User {
   id                  String               @id @default(cuid())
   email               String               @unique
-  firstName           String?
-  lastName            String?
-  nickname            String               @unique
+  password            String? // null if user signed up via Google
+  displayName         String?
+  username            String               @unique
+  googleId            String?              @unique
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
+  authProvider        AuthProvider         @default(BASIC)
   movieReviews        MovieReview[]
   movieStandoutScenes MovieStandoutScene[]
   movieStandoutQuotes MovieStandoutQuote[]
@@ -151,4 +153,9 @@ enum OverallOpinion {
   MASTERPIECE
   MEH
   GARBAGE
+}
+
+enum AuthProvider {
+  BASIC // For form-based signups
+  GOOGLE // For Google OAuth signups
 }
