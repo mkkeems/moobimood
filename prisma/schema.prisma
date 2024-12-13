@@ -14,30 +14,34 @@ datasource db {
 }
 
 model User {
-  id                  String               @id @default(cuid())
-  email               String               @unique
-  firstName           String?
-  lastName            String?
-  nickname            String               @unique
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email     String  @unique
+  firstName String?
+  lastName  String?
+  nickname  String  @unique
+
   movieReviews        MovieReview[]
   movieStandoutScenes MovieStandoutScene[]
   movieStandoutQuotes MovieStandoutQuote[]
 }
 
 model Movie {
-  id                  String               @id @default(cuid())
-  originalTitle       String
-  releaseDate         DateTime
-  runtime             Int
-  posterPath          String
-  imdbId              String
-  releaseYear         Int
-  genre               String
-  overview            String?
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  originalTitle String
+  releaseDate   DateTime
+  runtime       Int
+  posterPath    String
+  imdbId        String
+  releaseYear   Int
+  genre         String
+  overview      String?
+
   movieReviews        MovieReview[]
   movieStandoutScenes MovieStandoutScene[]
   movieStandoutQuotes MovieStandoutQuote[]
@@ -45,100 +49,123 @@ model Movie {
 
 // the categories questions fall under
 model MovieReviewQuestionCategory {
-  id          String                @id @default(cuid())
-  name        String                @unique
+  id String @id @default(cuid())
+
+  name        String  @unique
   description String?
-  questions   MovieReviewQuestion[]
+
+  questions MovieReviewQuestion[]
 }
 
 // the questions for a review
 model MovieReviewQuestion {
-  id                   String                              @id @default(cuid())
+  id String @id @default(cuid())
+
   question             String
   topic                String
-  categoryId           String
-  category             MovieReviewQuestionCategory         @relation(fields: [categoryId], references: [id])
   options              MovieReviewQuestionResponseOption[]
   movieReviewResponses MovieReviewResponse[]
+
+  categoryId String
+  category   MovieReviewQuestionCategory @relation(fields: [categoryId], references: [id])
 
   @@unique([question, categoryId])
 }
 
 // the multiple choice options for a question
 model MovieReviewQuestionResponseOption {
-  id                   String                @id @default(cuid())
-  questionId           String
-  question             MovieReviewQuestion   @relation(fields: [questionId], references: [id])
+  id String @id @default(cuid())
+
   optionText           String
   movieReviewResponses MovieReviewResponse[]
+
+  questionId String
+  question   MovieReviewQuestion @relation(fields: [questionId], references: [id])
 
   @@unique([optionText, questionId])
 }
 
 // review submitted by a user
 model MovieReview {
-  id                  String                   @id @default(cuid())
-  movieId             String
-  movie               Movie                    @relation(fields: [movieId], references: [id])
-  userId              String
-  user                User                     @relation(fields: [userId], references: [id])
-  createdAt           DateTime                 @default(now())
-  updatedAt           DateTime                 @updatedAt
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   responses           MovieReviewResponse[]
   finalVerdict        MovieReviewFinalVerdict?
   movieStandoutScenes MovieStandoutScene[]
   movieStandoutQuotes MovieStandoutQuote[]
+
+  movieId String
+  movie   Movie  @relation(fields: [movieId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 // response of a user to a question in a review
 model MovieReviewResponse {
-  id               String                             @id @default(cuid())
-  reviewId         String
-  review           MovieReview                        @relation(fields: [reviewId], references: [id])
-  questionId       String
-  question         MovieReviewQuestion                @relation(fields: [questionId], references: [id])
+  id String @id @default(cuid())
+
+  preference PreferenceType // "Amazing👍/Horrible👎/Don't care🤷" about this aspect
+
+  reviewId String
+  review   MovieReview @relation(fields: [reviewId], references: [id])
+
+  questionId String
+  question   MovieReviewQuestion @relation(fields: [questionId], references: [id])
+
   selectedOptionId String?
   selectedOption   MovieReviewQuestionResponseOption? @relation(fields: [selectedOptionId], references: [id])
-  preference       PreferenceType // "Amazing👍/Horrible👎/Don't care🤷" about this aspect
 }
 
 model MovieReviewFinalVerdict {
-  id                 String         @id @default(cuid())
-  reviewId           String         @unique
-  review             MovieReview    @relation(fields: [reviewId], references: [id])
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   overallOpinion     OverallOpinion // (Masterpiece, Meh, Garbage)
   moodTags           String[]
   additionalComments String? // Optional long text response for additional comments
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
+
+  reviewId String      @unique
+  review   MovieReview @relation(fields: [reviewId], references: [id])
 }
 
 model MovieStandoutScene {
-  id          String      @id @default(cuid())
-  movieId     String
-  movie       Movie       @relation(fields: [movieId], references: [id])
-  reviewId    String
-  review      MovieReview @relation(fields: [reviewId], references: [id])
-  userId      String
-  user        User        @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   scene       String
   description String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+
+  movieId String
+  movie   Movie  @relation(fields: [movieId], references: [id])
+
+  reviewId String
+  review   MovieReview @relation(fields: [reviewId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 model MovieStandoutQuote {
-  id          String      @id @default(cuid())
-  movieId     String
-  movie       Movie       @relation(fields: [movieId], references: [id])
-  reviewId    String
-  review      MovieReview @relation(fields: [reviewId], references: [id])
-  userId      String
-  user        User        @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   quote       String
   description String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+
+  movieId String
+  movie   Movie  @relation(fields: [movieId], references: [id])
+
+  reviewId String
+  review   MovieReview @relation(fields: [reviewId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 enum PreferenceType {
