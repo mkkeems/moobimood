@@ -1,3 +1,4 @@
+import { isValid } from "date-fns";
 import { SignJWT, jwtVerify } from "jose";
 
 export const secretKey = process.env.SESSION_SECRET;
@@ -8,7 +9,12 @@ export type SessionPayload = {
   expiresAt: Date;
 };
 
-export const tokenExpirationTime = {
+export enum TokenTypeEnum {
+  accessToken = "accessToken",
+  refreshToken = "refreshToken",
+}
+
+export const tokenExpirationTime: { [key in TokenTypeEnum]: string } = {
   accessToken: "15m",
   refreshToken: "7d",
 };
@@ -30,4 +36,14 @@ export async function decrypt(session: string | undefined = "") {
   } catch (error) {
     console.log("Failed to verify session");
   }
+}
+
+export function isSessionPayload(payload: any): payload is SessionPayload {
+  return (
+    typeof payload === "object" &&
+    payload !== null &&
+    typeof payload.email === "string" &&
+    typeof payload.expiresAt === "string" &&
+    isValid(new Date(payload.expiresAt))
+  );
 }

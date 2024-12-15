@@ -16,3 +16,19 @@ export const getExpiresAt = (expTime: string): Date => {
       throw new Error("Invalid expiration time format. Use 'm', 'h', or 'd'.");
   }
 };
+
+export const getMaxAge = (expTime: string): number => {
+  const timeUnit = expTime.slice(-1);
+  const timeValue = parseInt(expTime.slice(0, -1), 10);
+
+  switch (timeUnit) {
+    case "m":
+      return timeValue * 60;
+    case "h":
+      return timeValue * 60 * 60;
+    case "d":
+      return timeValue * 60 * 60 * 24;
+    default:
+      throw new Error("Invalid expiration time format. Use 'm', 'h', or 'd'.");
+  }
+};
