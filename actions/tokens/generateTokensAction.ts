@@ -5,6 +5,7 @@ import { TokenTypeEnum } from "./tokenUtils";
 import { generateNewTokens } from "./generateNewTokens";
 
 export async function generateTokensAction(email: string) {
+  console.log("getting them new new tokens yeaaaa");
   const {
     token: accessToken,
     tokenExpiresAt: accessTokenExpiresAt,

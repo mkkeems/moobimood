@@ -24,6 +24,8 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { loginUserAction } from "./loginUserAction";
+import { generateTokensAction } from "@/actions/tokens/generateTokensAction";
+import { useRouter } from "next/navigation";
 
 export type LoginFormValues = z.infer<typeof loginFormSchema>;
 
@@ -39,17 +41,23 @@ const LoginForm = () => {
       password: "",
     },
   });
+  const router = useRouter();
 
   const { handleSubmit, control, setError, setFocus } = form;
 
   const onSubmit = handleSubmit(async (values: LoginFormValues) => {
     const result = await loginUserAction(values);
     if (result.success) {
-      /**
-       * TODO:
-       * On login success, add session + redirect to dashboard
-       */
-      console.log("login works! great success");
+      const { email } = result;
+
+      await generateTokensAction(email);
+      try {
+        console.log("login works! great success");
+        await generateTokensAction(values.email);
+        router.push("/");
+      } catch (error) {
+        console.error("Failed to generate tokens:", error);
+      }
     } else {
       if (result.fieldErrors) {
         Object.entries(result.fieldErrors).forEach(

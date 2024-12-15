@@ -5,6 +5,7 @@ import { generateTokensAction } from "./generateTokensAction";
 import { decrypt, isSessionPayload } from "./tokenUtils";
 
 export async function refreshTokensAction() {
+  console.log("refresh token in the worksss");
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get("refreshToken")?.value;
 

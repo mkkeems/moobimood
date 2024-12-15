@@ -1,8 +1,21 @@
 import { isValid } from "date-fns";
-import { SignJWT, jwtVerify } from "jose";
+import { EncryptJWT, jwtDecrypt } from "jose";
 
 export const secretKey = process.env.SESSION_SECRET;
-export const encodedKey = new TextEncoder().encode(secretKey);
+
+export async function getEncodedKey() {
+  if (!secretKey) {
+    throw new Error("SESSION_SECRET is not defined");
+  }
+
+  return await crypto.subtle.importKey(
+    "raw",
+    Buffer.from(secretKey, "base64"),
+    { name: "AES-GCM" },
+    true,
+    ["encrypt", "decrypt"]
+  );
+}
 
 export type SessionPayload = {
   email: string;
@@ -15,23 +28,24 @@ export enum TokenTypeEnum {
 }
 
 export const tokenExpirationTime: { [key in TokenTypeEnum]: string } = {
-  accessToken: "15m",
+  accessToken: "1m",
   refreshToken: "7d",
 };
 
 export async function encrypt(payload: SessionPayload, expTime: string) {
-  return new SignJWT(payload)
-    .setProtectedHeader({ alg: "HS256" })
+  const encodedKey = await getEncodedKey();
+
+  return new EncryptJWT(payload)
+    .setProtectedHeader({ alg: "dir", enc: "A256GCM" })
     .setIssuedAt()
     .setExpirationTime(expTime)
-    .sign(encodedKey);
+    .encrypt(encodedKey);
 }
 
 export async function decrypt(session: string | undefined = "") {
   try {
-    const { payload } = await jwtVerify(session, encodedKey, {
-      algorithms: ["HS256"],
-    });
+    const encodedKey = await getEncodedKey();
+    const { payload } = await jwtDecrypt(session, encodedKey);
     return payload;
   } catch (error) {
     console.log("Failed to verify session");

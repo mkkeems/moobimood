@@ -6,11 +6,16 @@ import { getUserByEmail } from "@/db/user";
 import { verifyPassword } from "@/lib/password";
 import { AuthProvider } from "@prisma/client";
 
-type LoginUserActionResult = {
-  success: boolean;
-  error?: string;
-  fieldErrors?: Partial<Record<keyof LoginFormValues, string>>;
-};
+type LoginUserActionResult =
+  | {
+      success: false;
+      error: string;
+      fieldErrors?: Partial<Record<keyof LoginFormValues, string>>;
+    }
+  | {
+      success: true;
+      email: string;
+    };
 
 export const loginUserAction = async (
   data: LoginFormValues
@@ -54,5 +59,5 @@ export const loginUserAction = async (
     };
   }
 
-  return { success: true };
+  return { success: true, email: emailInput };
 };

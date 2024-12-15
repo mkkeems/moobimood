@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { Icons } from "./ui/icons";
+import { Icons } from "./icons";
 
 export const GoogleSignInButton = () => {
   const handleGoogleSignIn = async () => {

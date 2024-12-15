@@ -1,7 +1,7 @@
 import LoginForm from "./LoginForm";
 
-const Page = () => {
+const LoginPage = () => {
   return <LoginForm />;
 };
 
-export default Page;
+export default LoginPage;
