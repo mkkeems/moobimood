@@ -18,11 +18,14 @@ export async function middleware(request: NextRequest) {
   }
 
   const refreshResult = await refreshTokensAction();
+  console.log(refreshResult);
   if (refreshResult.success) {
+    console.log("refresh succes!");
     return NextResponse.next();
   }
 
-  return NextResponse.redirect(new URL("/profile", request.url));
+  console.log("refresh faillllls :(");
+  return NextResponse.redirect(new URL("/login", request.url));
 }
 
 export const config = {

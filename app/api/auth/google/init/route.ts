@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
 
   const googleOAuthURL = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
-    client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+    client_id: process.env.GOOGLE_CLIENT_ID!,
     response_type: "code",
     scope: ["openid", "email", "profile"].join(" "),
     redirect_uri: process.env.GOOGLE_REDIRECT_URI!,
