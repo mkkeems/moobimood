@@ -9,10 +9,15 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { useRouter } from "next/navigation";
-import { deleteSession } from "@/actions/tokens/deleteTokensAction";
+import { useAuthUser } from "@/queries/useAuthUserQuery";
 
 export function NavBar() {
+  const { data, isLoading, isError } = useAuthUser();
+
+  console.log({ data });
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <NavigationMenu>
       <NavigationMenuList>
