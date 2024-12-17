@@ -26,6 +26,7 @@ import Link from "next/link";
 import { loginUserAction } from "./loginUserAction";
 import { generateTokensAction } from "@/actions/tokens/generateTokensAction";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type LoginFormValues = z.infer<typeof loginFormSchema>;
 
@@ -34,6 +35,9 @@ function isKeyOfSignupFormValues(key: string): key is keyof LoginFormValues {
 }
 
 const LoginForm = () => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -41,7 +45,6 @@ const LoginForm = () => {
       password: "",
     },
   });
-  const router = useRouter();
 
   const { handleSubmit, control, setError, setFocus } = form;
 
@@ -54,6 +57,7 @@ const LoginForm = () => {
       try {
         console.log("login works! great success");
         await generateTokensAction(values.email);
+        queryClient.invalidateQueries({ queryKey: ["authUser"] });
         router.push("/");
       } catch (error) {
         console.error("Failed to generate tokens:", error);

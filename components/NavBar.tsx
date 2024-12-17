@@ -10,14 +10,14 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { useAuthUser } from "@/queries/useAuthUserQuery";
+import { useLogout } from "@/queries/useLogoutMutation";
 
 export function NavBar() {
-  const { data, isLoading, isError } = useAuthUser();
+  const { data: authUser, isLoading, isError, status } = useAuthUser();
+  const logoutMutation = useLogout();
 
-  console.log({ data });
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const handleLogout = async () => logoutMutation.mutate();
+
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -28,27 +28,30 @@ export function NavBar() {
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link href="/login" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Login
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link href="/signup" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Signup
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <Link href="/api/logout" legacyBehavior passHref>
+        {!authUser ? (
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link href="/login" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Login
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/signup" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Signup
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        ) : (
+          <NavigationMenuItem onClick={handleLogout}>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Logout
             </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
+          </NavigationMenuItem>
+        )}
       </NavigationMenuList>
     </NavigationMenu>
   );

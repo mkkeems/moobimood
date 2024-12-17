@@ -28,7 +28,7 @@ export enum TokenTypeEnum {
 }
 
 export const tokenExpirationTime: { [key in TokenTypeEnum]: string } = {
-  accessToken: "1m",
+  accessToken: "15m",
   refreshToken: "7d",
 };
 
@@ -48,7 +48,7 @@ export async function decrypt(session: string | undefined = "") {
     const { payload } = await jwtDecrypt(session, encodedKey);
     return payload;
   } catch (error) {
-    console.log("Failed to verify session");
+    console.error("Failed to verify session");
   }
 }
 

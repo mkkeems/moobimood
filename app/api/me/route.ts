@@ -17,8 +17,12 @@ export async function GET(request: NextRequest) {
     return { success: false, error: "Invalid token payload." };
   }
 
-  const { email } = payload;
-  const authUser = await getUserByEmail(email);
+  const { email: emailToCheck } = payload;
+  const authUser = await getUserByEmail(emailToCheck);
+  if (!authUser) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+  const { email, username, displayName, id } = authUser;
 
-  return NextResponse.json({ user: authUser });
+  return NextResponse.json({ email, username, displayName, userId: id });
 }
