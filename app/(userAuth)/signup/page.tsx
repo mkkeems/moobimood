@@ -1,9 +1,9 @@
-"use client";
-
+import { getDecryptedGoogleAuthEmail } from "./getDecryptedGoogleAuthEmailAction";
 import SignUpForm from "./SignupForm";
 
-const Page = () => {
-  return <SignUpForm />;
+const Page = async () => {
+  const googleAuthEmail = await getDecryptedGoogleAuthEmail();
+  return <SignUpForm googleAuthEmail={googleAuthEmail} />;
 };
 
 export default Page;

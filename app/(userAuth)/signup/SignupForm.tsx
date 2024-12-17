@@ -32,7 +32,8 @@ function isKeyOfSignupFormValues(key: string): key is keyof SignupFormValues {
   return key in signupFormSchema.shape;
 }
 
-const SignupForm = () => {
+const SignupForm = ({ googleAuthEmail }: { googleAuthEmail?: string }) => {
+  console.log({ googleAuthEmail });
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {

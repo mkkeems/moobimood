@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import csrf from "csrf";
+import { generateNewTokens } from "@/actions/tokens/generateNewTokens";
 
 const tokens = new csrf();
 
@@ -41,6 +42,12 @@ export async function GET(req: NextRequest) {
 
     const response = NextResponse.redirect(redirectUrl);
 
+    // const {
+    //   token: tempAuthToken,
+    //   tokenExpiresAt: tempAuthTokenExpiresAt,
+    //   tokenMaxAge: tempAuthTokenMaxAge,
+    // } = await generateNewTokens({ email, tokenType: TokenTypeEnum.tempAuthToken });
+
     /**
      * TODO:
      * - get user info from google with tokenData.access_token
@@ -52,6 +59,21 @@ export async function GET(req: NextRequest) {
      * - create user sessions
      * - redirect to the previous page
      */
+    // Fetch user info from Google using the access token
+    const userInfoResponse = await fetch(
+      "https://www.googleapis.com/oauth2/v2/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${tokenData.access_token}`,
+        },
+      }
+    );
+
+    console.log({ userInfoResponse });
+
+    if (!userInfoResponse.ok) {
+      throw new Error("Failed to fetch user info from Google");
+    }
 
     // Clear the CSRF secret cookie
     response.cookies.delete("csrfSecret");

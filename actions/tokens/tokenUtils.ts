@@ -25,11 +25,13 @@ export type SessionPayload = {
 export enum TokenTypeEnum {
   accessToken = "accessToken",
   refreshToken = "refreshToken",
+  tempAuthToken = "tempAuthToken",
 }
 
 export const tokenExpirationTime: { [key in TokenTypeEnum]: string } = {
   accessToken: "15m",
   refreshToken: "7d",
+  tempAuthToken: "15m",
 };
 
 export async function encrypt(payload: SessionPayload, expTime: string) {

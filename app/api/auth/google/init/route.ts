@@ -4,16 +4,18 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const { secret, csrfToken } = generateCSRFToken();
+  console.log("googleClientId", process.env.GOOGLE_CLIENT_ID);
 
   const googleOAuthURL = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
     client_id: process.env.GOOGLE_CLIENT_ID!,
     response_type: "code",
-    scope: ["openid", "email", "profile"].join(" "),
+    scope: ["openid", "profile", "email"].join(" "),
     redirect_uri: process.env.GOOGLE_REDIRECT_URI!,
     state: csrfToken,
-    display: "popup",
   };
+
+  console.log({ options });
 
   const redirectUrl = `${googleOAuthURL}?${queryString.stringify(options)}`;
 
