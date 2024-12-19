@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import csrf from "csrf";
 import { generateNewTokens } from "@/actions/tokens/generateNewTokens";
+import { TokenTypeEnum } from "@/actions/tokens/tokenUtils";
 
 const tokens = new csrf();
 
@@ -61,7 +62,7 @@ export async function GET(req: NextRequest) {
      */
     // Fetch user info from Google using the access token
     const userInfoResponse = await fetch(
-      "https://www.googleapis.com/oauth2/v2/userinfo",
+      "https://openidconnect.googleapis.com/v1/userinfo",
       {
         headers: {
           Authorization: `Bearer ${tokenData.access_token}`,
@@ -74,9 +75,38 @@ export async function GET(req: NextRequest) {
     if (!userInfoResponse.ok) {
       throw new Error("Failed to fetch user info from Google");
     }
+    const userInfo = await userInfoResponse.json();
+    console.log("User Info:", userInfo);
 
+    if (userInfo.email) {
+      const email = userInfo.email;
+      console.log("User email:", email);
+
+      const {
+        token: tempToken,
+        tokenExpiresAt: tempTokenExpiresAt,
+        tokenMaxAge: tempTokenMaxAge,
+      } = await generateNewTokens({
+        email,
+        tokenType: TokenTypeEnum.tempAuthToken,
+      });
+
+      if (!tempToken) {
+        throw new Error("Failed to generate temp token");
+      }
+
+      response.cookies.set("tempToken", tempToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        expires: tempTokenExpiresAt,
+        sameSite: "strict",
+        path: "/",
+        maxAge: tempTokenMaxAge,
+      });
+    }
     // Clear the CSRF secret cookie
     response.cookies.delete("csrfSecret");
+    response.cookies.delete("previousPage");
 
     return response;
   } catch (error) {

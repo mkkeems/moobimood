@@ -1,22 +1,35 @@
 "use server";
 
-import { signupFormSchema } from "./signupFormSchema";
-import { SignupFormValues } from "./SignupForm";
+import {
+  signupFormSchema,
+  signupWithGoogleFormSchema,
+} from "./signupFormSchema";
+import { SignupFormValues } from "./SignupFormStepOne";
+import { GoogleSignupFormValues } from "./SignupForm";
 import { createUser, getUserByEmail, getUserByUsername } from "@/db/user";
 import { hashPassword } from "@/lib/password";
+import { AuthProvider } from "@prisma/client";
 
 type SignupUserActionResult = {
   success: boolean;
   error?: string;
-  fieldErrors?: Partial<Record<keyof SignupFormValues, string>>;
+  fieldErrors?: Partial<
+    Record<keyof SignupFormValues | keyof GoogleSignupFormValues, string>
+  >;
 };
 
 export const signupUserAction = async (
-  data: SignupFormValues
+  data: SignupFormValues | GoogleSignupFormValues,
+  authProvider: AuthProvider
 ): Promise<SignupUserActionResult> => {
-  const result = signupFormSchema.safeParse(data);
+  let result;
+  if (authProvider === AuthProvider.BASIC) {
+    result = signupFormSchema.safeParse(data);
+  } else if (authProvider === AuthProvider.GOOGLE) {
+    result = signupWithGoogleFormSchema.safeParse(data);
+  }
 
-  if (!result.success) {
+  if (!result || !result.success) {
     return {
       success: false,
       error: "Invalid form data.",
@@ -43,10 +56,21 @@ export const signupUserAction = async (
     };
   }
 
-  const hashedPassword = await hashPassword(data.password);
+  const newUser = { ...data, authProvider };
 
+  if (
+    authProvider === AuthProvider.BASIC &&
+    "password" in data &&
+    data.password
+  ) {
+    const hashedPassword = await hashPassword(data.password);
+    (newUser as SignupFormValues).password = hashedPassword;
+  }
+
+  console.log({ newUser });
+
+  await createUser(newUser);
   // TODO: should do some error handling for prisma errors
-  await createUser({ ...data, password: hashedPassword });
 
   return result;
 };

@@ -20,7 +20,7 @@ export async function getEncodedKey() {
 export type SessionPayload = {
   email: string;
   expiresAt: Date;
-};
+} & Record<any, any>;
 
 export enum TokenTypeEnum {
   accessToken = "accessToken",

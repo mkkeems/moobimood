@@ -2,8 +2,10 @@ import { getDecryptedGoogleAuthEmail } from "./getDecryptedGoogleAuthEmailAction
 import SignUpForm from "./SignupForm";
 
 const Page = async () => {
-  const googleAuthEmail = await getDecryptedGoogleAuthEmail();
-  return <SignUpForm googleAuthEmail={googleAuthEmail} />;
+  const googleAuthResponse = await getDecryptedGoogleAuthEmail();
+  console.log("=======googleAuthResponse", googleAuthResponse);
+
+  return <SignUpForm googleAuthResponse={googleAuthResponse} />;
 };
 
 export default Page;
