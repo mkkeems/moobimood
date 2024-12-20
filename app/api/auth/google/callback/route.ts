@@ -35,31 +35,11 @@ export async function GET(req: NextRequest) {
     }
 
     const tokenData = await tokenResponse.json();
-    console.log({ tokenData });
 
     const previousPage = req.cookies.get("previousPage")?.value || "/";
 
     const redirectUrl = new URL(previousPage, req.nextUrl.origin);
 
-    const response = NextResponse.redirect(redirectUrl);
-
-    // const {
-    //   token: tempAuthToken,
-    //   tokenExpiresAt: tempAuthTokenExpiresAt,
-    //   tokenMaxAge: tempAuthTokenMaxAge,
-    // } = await generateNewTokens({ email, tokenType: TokenTypeEnum.tempAuthToken });
-
-    /**
-     * TODO:
-     * - get user info from google with tokenData.access_token
-     * - check if user already exists in the db
-     * - if not, create a new user
-     *    - navigate back to signup page
-     *      - if googleAuth success, "add username" form
-     *          => on submit, create user
-     * - create user sessions
-     * - redirect to the previous page
-     */
     // Fetch user info from Google using the access token
     const userInfoResponse = await fetch(
       "https://openidconnect.googleapis.com/v1/userinfo",
@@ -70,43 +50,31 @@ export async function GET(req: NextRequest) {
       }
     );
 
-    console.log({ userInfoResponse });
-
     if (!userInfoResponse.ok) {
       throw new Error("Failed to fetch user info from Google");
     }
     const userInfo = await userInfoResponse.json();
-    console.log("User Info:", userInfo);
 
     if (userInfo.email) {
       const email = userInfo.email;
-      console.log("User email:", email);
 
-      const {
-        token: tempToken,
-        tokenExpiresAt: tempTokenExpiresAt,
-        tokenMaxAge: tempTokenMaxAge,
-      } = await generateNewTokens({
+      const { token: tempToken } = await generateNewTokens({
         email,
+        googleId: userInfo.sub,
         tokenType: TokenTypeEnum.tempAuthToken,
       });
 
-      if (!tempToken) {
-        throw new Error("Failed to generate temp token");
-      }
-
-      response.cookies.set("tempToken", tempToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        expires: tempTokenExpiresAt,
-        sameSite: "strict",
-        path: "/",
-        maxAge: tempTokenMaxAge,
-      });
+      redirectUrl.searchParams.set("google", tempToken);
     }
+
+    const response = NextResponse.redirect(redirectUrl, { status: 302 });
+
     // Clear the CSRF secret cookie
     response.cookies.delete("csrfSecret");
     response.cookies.delete("previousPage");
+
+    console.log("Redirecting to:", redirectUrl.toString());
+    console.log("Google callback route response", response);
 
     return response;
   } catch (error) {

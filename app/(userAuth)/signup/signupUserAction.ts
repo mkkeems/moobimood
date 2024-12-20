@@ -5,18 +5,23 @@ import {
   signupWithGoogleFormSchema,
 } from "./signupFormSchema";
 import { SignupFormValues } from "./SignupFormStepOne";
-import { GoogleSignupFormValues } from "./SignupForm";
+import { GoogleSignupFormValues } from "./GoogleSignupFinishForm";
 import { createUser, getUserByEmail, getUserByUsername } from "@/db/user";
 import { hashPassword } from "@/lib/password";
 import { AuthProvider } from "@prisma/client";
 
-type SignupUserActionResult = {
-  success: boolean;
-  error?: string;
-  fieldErrors?: Partial<
-    Record<keyof SignupFormValues | keyof GoogleSignupFormValues, string>
-  >;
-};
+type SignupUserActionResult =
+  | {
+      success: false;
+      error?: string;
+      fieldErrors?: Partial<
+        Record<keyof SignupFormValues | keyof GoogleSignupFormValues, string>
+      >;
+    }
+  | {
+      success: true;
+      data: Record<string, any>;
+    };
 
 export const signupUserAction = async (
   data: SignupFormValues | GoogleSignupFormValues,

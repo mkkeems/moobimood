@@ -8,8 +8,7 @@ export const generateNewTokens = async ({
 }: {
   tokenType: TokenTypeEnum;
   email: string;
-  otherSessionPayload?: Record<any, any>;
-}) => {
+} & Record<string, any>) => {
   const tokenExpiresAt = getExpiresAt(tokenExpirationTime[tokenType]);
 
   const tokenPayload = {

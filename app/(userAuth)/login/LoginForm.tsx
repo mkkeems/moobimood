@@ -52,11 +52,9 @@ const LoginForm = () => {
     const result = await loginUserAction(values);
     if (result.success) {
       const { email } = result;
-
-      await generateTokensAction(email);
       try {
         console.log("login works! great success");
-        await generateTokensAction(values.email);
+        await generateTokensAction(email);
         queryClient.invalidateQueries({ queryKey: ["authUser"] });
         router.push("/");
       } catch (error) {
