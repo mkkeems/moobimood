@@ -13,7 +13,6 @@ const SignupForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const googleAuthToken = searchParams.get("google");
-  console.log({ googleAuthToken });
 
   const [googleAuthResponse, setGoogleAuthResponse] =
     useState<DecryptedGoogleAuthTokenResponse>();
@@ -70,12 +69,15 @@ const SignupForm = () => {
     };
   }, [googleAuthToken]);
 
-  if (googleAuthToken && loading) {
-    return <p>Loading...</p>;
-  }
-
   if (!googleAuthToken || expired || !googleAuthResponse) {
     return <SignupFormStepOne />;
+  }
+
+  /**
+   * TODO: Add styles. Replace loading with skeleton loader
+   */
+  if (googleAuthToken && loading) {
+    return <p>Loading...</p>;
   }
 
   return <GoogleSignupFinishForm googleAuthResponse={googleAuthResponse} />;

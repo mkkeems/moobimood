@@ -32,7 +32,9 @@ export default function RootLayout({
       >
         <Providers>
           <NavBar />
-          {children}
+          <div className="w-full h-full flex flex-col justify-center align-center">
+            {children}
+          </div>
         </Providers>
       </body>
     </html>

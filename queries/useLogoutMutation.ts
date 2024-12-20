@@ -11,13 +11,11 @@ export const useLogout = () => {
       if (!response.ok) {
         throw new Error("Logout failed");
       }
-      console.log("/api/logout response: ", response);
       return response.json();
     },
     onSuccess: () => {
       queryClient.setQueryData(["authUser"], null);
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      router.push("/login");
     },
     onError: (error) => {
       console.error("Logout error:", error);

@@ -20,38 +20,42 @@ export function NavBar() {
 
   return (
     <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <Link href="/" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Home
-            </NavigationMenuLink>
-          </Link>
-        </NavigationMenuItem>
-        {!authUser ? (
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <Link href="/login" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Login
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/signup" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Signup
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        ) : (
-          <NavigationMenuItem onClick={handleLogout}>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Logout
-            </NavigationMenuLink>
+      <NavigationMenuList className="justify-between w-screen">
+        <div>
+          <NavigationMenuItem>
+            <Link href="/" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Home
+              </NavigationMenuLink>
+            </Link>
           </NavigationMenuItem>
-        )}
+        </div>
+        <div>
+          {!authUser ? (
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link href="/login" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Login
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/signup" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Signup
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          ) : (
+            <NavigationMenuItem onClick={handleLogout}>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Logout
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          )}
+        </div>
       </NavigationMenuList>
     </NavigationMenu>
   );

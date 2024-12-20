@@ -7,6 +7,7 @@ import {
   CardTitle,
   CardContent,
   CardFooter,
+  CardDescription,
 } from "@/components/ui/card";
 import {
   Form,
@@ -29,6 +30,7 @@ import { signupUserAction } from "./signupUserAction";
 import { generateTokensAction } from "@/actions/tokens/generateTokensAction";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 export type GoogleSignupFormValues = z.infer<typeof signupWithGoogleFormSchema>;
 
@@ -46,6 +48,42 @@ const GoogleSignupFinishForm = ({
   const router = useRouter();
   const queryClient = useQueryClient();
 
+  const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
+  const [createAccountSuccess, setCreateAccountSuccess] = useState(false);
+
+  useEffect(() => {
+    let createAccountSuccesstimer: NodeJS.Timeout;
+    if (createAccountSuccess) {
+      createAccountSuccesstimer = setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(createAccountSuccesstimer);
+    };
+  }, [createAccountSuccess]);
+
+  useLayoutEffect(() => {
+    let accountAlreadyExiststimer: NodeJS.Timeout;
+    if (googleAuthResponse && googleAuthResponse.accountAlreadyExists) {
+      setAccountAlreadyExists(true);
+      const generateTokensForNewUser = async () => {
+        await generateTokensAction(googleAuthResponse.email);
+        queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      };
+
+      generateTokensForNewUser();
+      accountAlreadyExiststimer = setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    }
+
+    return () => {
+      clearTimeout(accountAlreadyExiststimer);
+    };
+  }, [googleAuthResponse]);
+
   const form = useForm<GoogleSignupFormValues>({
     resolver: zodResolver(signupWithGoogleFormSchema),
     defaultValues: {
@@ -57,27 +95,18 @@ const GoogleSignupFinishForm = ({
   const { handleSubmit, control, setError, setFocus } = form;
 
   const onSubmit = handleSubmit(async (values: GoogleSignupFormValues) => {
-    console.log({ values });
     const result = await signupUserAction(values, AuthProvider.GOOGLE);
 
-    console.log({ result });
-
     if (result.success) {
-      /**
-       * TODO:
-       * - On signup success, add session + redirect to previous page
-       */
-      console.log("user created! great success");
       const {
         data: { email },
       } = result;
 
       await generateTokensAction(email);
       try {
-        console.log("Google Signup Complete! great success");
         await generateTokensAction(values.email);
         queryClient.invalidateQueries({ queryKey: ["authUser"] });
-        router.push("/");
+        setCreateAccountSuccess(true);
       } catch (error) {
         console.error("Failed to generate tokens:", error);
       }
@@ -105,7 +134,29 @@ const GoogleSignupFinishForm = ({
     }
   });
 
-  if (googleAuthResponse?.accountAlreadyExists) {
+  /**
+   * TODO: Add styles
+   */
+  if (createAccountSuccess) {
+    return (
+      <Card className="w-[350px]">
+        <CardHeader>
+          <CardTitle>Account Created!</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CardDescription>
+            Your account has been successfully created. Redirecting you to the
+            homepage...
+          </CardDescription>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  /**
+   * TODO: Add styles
+   */
+  if (accountAlreadyExists) {
     return (
       <div>Account with this email already exists. Redirect to home...</div>
     );
@@ -129,7 +180,6 @@ const GoogleSignupFinishForm = ({
                     <Input
                       type="email"
                       {...field}
-                      //defaultValue={googleAuthResponse?.email}
                       value={googleAuthResponse?.email}
                       disabled
                     />

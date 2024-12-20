@@ -47,13 +47,7 @@ const SignupFormStepOne = () => {
   const onSubmit = handleSubmit(async (values: SignupFormValues) => {
     const result = await signupUserAction(values, AuthProvider.BASIC);
 
-    if (result.success) {
-      /**
-       * TODO:
-       * - On signup success, add session + redirect to previous page
-       */
-      console.log("user created! great success");
-    } else {
+    if (!result.success) {
       if (result.fieldErrors) {
         Object.entries(result.fieldErrors).forEach(
           ([field, message], index) => {
@@ -86,7 +80,14 @@ const SignupFormStepOne = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <GoogleSignInButton />
+        <div className="flex flex-col justify-center space-y-2">
+          <GoogleSignInButton />
+        </div>
+        <div className="flex items-center justify-center w-full my-4">
+          <hr className="w-full border-1 border-gray-300" />
+          <span className="mx-2 text-sm text-gray-400">OR</span>
+          <hr className="w-full border-1 border-gray-300" />
+        </div>
         <Form {...form}>
           <form onSubmit={onSubmit} className="space-y-8">
             <FormField
