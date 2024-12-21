@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { signupUserAction } from "./signupUserAction";
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 
 export type SignupFormValues = z.infer<typeof signupFormSchema>;
 
@@ -48,7 +49,7 @@ const SignupForm = () => {
     if (result.success) {
       /**
        * TODO:
-       * On signup success, add session + redirect to dashboard
+       * - On signup success, add session + redirect to previous page
        */
       console.log("user created! great success");
     } else {
@@ -84,6 +85,7 @@ const SignupForm = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <GoogleSignInButton />
         <Form {...form}>
           <form onSubmit={onSubmit} className="space-y-8">
             <FormField
