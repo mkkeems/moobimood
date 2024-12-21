@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import csrf from "csrf";
 import { generateNewTokens } from "@/actions/tokens/generateNewTokens";
 import { TokenTypeEnum } from "@/actions/tokens/tokenUtils";
+import { getUserByEmail } from "@/db/user";
 
 const tokens = new csrf();
 
@@ -38,7 +39,7 @@ export async function GET(req: NextRequest) {
 
     const previousPage = req.cookies.get("previousPage")?.value || "/";
 
-    const redirectUrl = new URL(previousPage, req.nextUrl.origin);
+    let redirectUrl = new URL(previousPage, req.nextUrl.origin);
 
     // Fetch user info from Google using the access token
     const userInfoResponse = await fetch(
@@ -57,6 +58,11 @@ export async function GET(req: NextRequest) {
 
     if (userInfo.email) {
       const email = userInfo.email;
+      const userExists = await getUserByEmail(email);
+
+      if (!userExists) {
+        redirectUrl = new URL("/signup", req.nextUrl.origin);
+      }
 
       const { token: tempToken } = await generateNewTokens({
         email,
@@ -69,12 +75,8 @@ export async function GET(req: NextRequest) {
 
     const response = NextResponse.redirect(redirectUrl, { status: 302 });
 
-    // Clear the CSRF secret cookie
     response.cookies.delete("csrfSecret");
     response.cookies.delete("previousPage");
-
-    console.log("Redirecting to:", redirectUrl.toString());
-    console.log("Google callback route response", response);
 
     return response;
   } catch (error) {

@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Form,
   FormControl,
@@ -26,6 +27,8 @@ import Link from "next/link";
 import { signupUserAction } from "./signupUserAction";
 import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 import { AuthProvider } from "@prisma/client";
+import { generateTokensAction } from "@/actions/tokens/generateTokensAction";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type SignupFormValues = z.infer<typeof signupFormSchema>;
 
@@ -34,6 +37,8 @@ function isKeyOfSignupFormValues(key: string): key is keyof SignupFormValues {
 }
 
 const SignupFormStepOne = () => {
+  const queryClient = useQueryClient();
+
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
@@ -47,7 +52,19 @@ const SignupFormStepOne = () => {
   const onSubmit = handleSubmit(async (values: SignupFormValues) => {
     const result = await signupUserAction(values, AuthProvider.BASIC);
 
-    if (!result.success) {
+    if (result.success) {
+      const {
+        data: { email },
+      } = result;
+
+      await generateTokensAction(email);
+      try {
+        await generateTokensAction(values.email);
+        queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      } catch (error) {
+        console.error("Failed to generate tokens:", error);
+      }
+    } else {
       if (result.fieldErrors) {
         Object.entries(result.fieldErrors).forEach(
           ([field, message], index) => {
@@ -81,7 +98,7 @@ const SignupFormStepOne = () => {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col justify-center space-y-2">
-          <GoogleSignInButton />
+          <GoogleSignInButton nextPath={"/signup"} />
         </div>
         <div className="flex items-center justify-center w-full my-4">
           <hr className="w-full border-1 border-gray-300" />

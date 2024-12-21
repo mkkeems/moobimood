@@ -27,6 +27,7 @@ import { loginUserAction } from "./loginUserAction";
 import { generateTokensAction } from "@/actions/tokens/generateTokensAction";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
 
 export type LoginFormValues = z.infer<typeof loginFormSchema>;
 
@@ -34,7 +35,7 @@ function isKeyOfSignupFormValues(key: string): key is keyof LoginFormValues {
   return key in loginFormSchema.shape;
 }
 
-const LoginForm = () => {
+export const LoginForm = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -91,6 +92,15 @@ const LoginForm = () => {
         <CardDescription>Log into your Moobimood account.</CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="flex flex-col justify-center space-y-2">
+          <GoogleSignInButton nextPath={"/login"} />
+          {/* <GoogleSignInButton /> */}
+        </div>
+        <div className="flex items-center justify-center w-full my-4">
+          <hr className="w-full border-1 border-gray-300" />
+          <span className="mx-2 text-sm text-gray-400">OR</span>
+          <hr className="w-full border-1 border-gray-300" />
+        </div>
         <Form {...form}>
           <form onSubmit={onSubmit} className="space-y-8">
             <FormField
@@ -139,5 +149,3 @@ const LoginForm = () => {
     </Card>
   );
 };
-
-export default LoginForm;
