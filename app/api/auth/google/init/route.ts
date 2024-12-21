@@ -1,28 +1,30 @@
+import { config } from "@/config";
 import { generateCSRFToken } from "@/utils/generateCSRFToken";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import queryString from "query-string";
-import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  const { searchParams } = new URL(req.url);
+  const nextPath = searchParams.get("nextPath");
+
   const { secret, csrfToken } = generateCSRFToken();
 
   const googleOAuthURL = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
-    client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+    client_id: config.GOOGLE_CLIENT_ID,
     response_type: "code",
-    scope: ["openid", "email", "profile"].join(" "),
-    redirect_uri: process.env.GOOGLE_REDIRECT_URI!,
+    scope: ["openid", "profile", "email"].join(" "),
+    redirect_uri: config.GOOGLE_REDIRECT_URI,
     state: csrfToken,
-    display: "popup",
   };
 
   const redirectUrl = `${googleOAuthURL}?${queryString.stringify(options)}`;
 
-  console.log("redirectUrl", redirectUrl);
-
   const response = NextResponse.json({ redirectUrl });
   response.cookies.set("csrfSecret", secret, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: config.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 300,
   });
@@ -34,10 +36,11 @@ export async function GET(req: NextRequest) {
    * - to keep track of previous pages, limit to 2? 5? idkyetlol
    * - navigate user back to the previous page after login success
    */
-  const previousPage = req.headers.get("referer") || "/";
+  const previousPage = nextPath || req.headers.get("referer") || "/";
+
   response.cookies.set("previousPage", previousPage, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: config.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 300,
   });

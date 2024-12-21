@@ -1,10 +1,12 @@
 import { Button } from "./ui/button";
-import { Icons } from "./ui/icons";
+import { Icons } from "./icons";
+import queryString from "query-string";
 
-export const GoogleSignInButton = () => {
+export const GoogleSignInButton = ({ nextPath }: { nextPath?: string }) => {
   const handleGoogleSignIn = async () => {
     try {
-      const response = await fetch("/api/auth/google/init");
+      const queryParams = queryString.stringify({ nextPath });
+      const response = await fetch(`/api/auth/google/init?${queryParams}`);
       const { redirectUrl } = await response.json();
 
       if (redirectUrl) {

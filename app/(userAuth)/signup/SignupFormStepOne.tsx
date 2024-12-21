@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Form,
   FormControl,
@@ -25,6 +26,9 @@ import {
 import Link from "next/link";
 import { signupUserAction } from "./signupUserAction";
 import { GoogleSignInButton } from "@/components/GoogleSignInButton";
+import { AuthProvider } from "@prisma/client";
+import { generateTokensAction } from "@/actions/tokens/generateTokensAction";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type SignupFormValues = z.infer<typeof signupFormSchema>;
 
@@ -32,7 +36,9 @@ function isKeyOfSignupFormValues(key: string): key is keyof SignupFormValues {
   return key in signupFormSchema.shape;
 }
 
-const SignupForm = () => {
+const SignupFormStepOne = () => {
+  const queryClient = useQueryClient();
+
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
@@ -44,14 +50,20 @@ const SignupForm = () => {
   const { handleSubmit, control, setError, setFocus } = form;
 
   const onSubmit = handleSubmit(async (values: SignupFormValues) => {
-    const result = await signupUserAction(values);
+    const result = await signupUserAction(values, AuthProvider.BASIC);
 
     if (result.success) {
-      /**
-       * TODO:
-       * - On signup success, add session + redirect to previous page
-       */
-      console.log("user created! great success");
+      const {
+        data: { email },
+      } = result;
+
+      await generateTokensAction(email);
+      try {
+        await generateTokensAction(values.email);
+        queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      } catch (error) {
+        console.error("Failed to generate tokens:", error);
+      }
     } else {
       if (result.fieldErrors) {
         Object.entries(result.fieldErrors).forEach(
@@ -85,7 +97,14 @@ const SignupForm = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <GoogleSignInButton />
+        <div className="flex flex-col justify-center space-y-2">
+          <GoogleSignInButton nextPath={"/signup"} />
+        </div>
+        <div className="flex items-center justify-center w-full my-4">
+          <hr className="w-full border-1 border-gray-300" />
+          <span className="mx-2 text-sm text-gray-400">OR</span>
+          <hr className="w-full border-1 border-gray-300" />
+        </div>
         <Form {...form}>
           <form onSubmit={onSubmit} className="space-y-8">
             <FormField
@@ -148,4 +167,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default SignupFormStepOne;

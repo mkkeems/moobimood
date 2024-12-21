@@ -1,9 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
+import { generateNewTokens } from "@/actions/tokens/generateNewTokens";
+import { TokenTypeEnum } from "@/actions/tokens/tokenUtils";
+import { config } from "@/config";
+import { getUserByEmail } from "@/db/user";
 import csrf from "csrf";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 const tokens = new csrf();
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest): Promise<NextResponse> {
   const { searchParams } = new URL(req.url);
   const code = searchParams.get("code");
   const state = searchParams.get("state");
@@ -16,14 +21,18 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    if (!code) {
+      throw new Error("No code provided");
+    }
+
     const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
-        code: code!,
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-        redirect_uri: process.env.GOOGLE_REDIRECT_URI!,
+        code: code,
+        client_id: config.GOOGLE_CLIENT_ID,
+        client_secret: config.GOOGLE_CLIENT_SECRET,
+        redirect_uri: config.GOOGLE_REDIRECT_URI,
         grant_type: "authorization_code",
       }),
     });
@@ -33,35 +42,54 @@ export async function GET(req: NextRequest) {
     }
 
     const tokenData = await tokenResponse.json();
-    console.log({ tokenData });
 
     const previousPage = req.cookies.get("previousPage")?.value || "/";
 
-    const redirectUrl = new URL(previousPage, req.nextUrl.origin);
+    let redirectUrl = new URL(previousPage, req.nextUrl.origin);
 
-    const response = NextResponse.redirect(redirectUrl);
+    // Fetch user info from Google using the access token
+    const userInfoResponse = await fetch(
+      "https://openidconnect.googleapis.com/v1/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${tokenData.access_token}`,
+        },
+      },
+    );
 
-    /**
-     * TODO:
-     * - get user info from google with tokenData.access_token
-     * - check if user already exists in the db
-     * - if not, create a new user
-     *    - navigate back to signup page
-     *      - if googleAuth success, "add username" form
-     *          => on submit, create user
-     * - create user sessions
-     * - redirect to the previous page
-     */
+    if (!userInfoResponse.ok) {
+      throw new Error("Failed to fetch user info from Google");
+    }
+    const userInfo = await userInfoResponse.json();
 
-    // Clear the CSRF secret cookie
+    if (userInfo.email) {
+      const email = userInfo.email;
+      const userExists = await getUserByEmail(email);
+
+      if (!userExists) {
+        redirectUrl = new URL("/signup", req.nextUrl.origin);
+      }
+
+      const { token: tempToken } = await generateNewTokens({
+        email,
+        googleId: userInfo.sub,
+        tokenType: TokenTypeEnum.tempAuthToken,
+      });
+
+      redirectUrl.searchParams.set("google", tempToken);
+    }
+
+    const response = NextResponse.redirect(redirectUrl, { status: 302 });
+
     response.cookies.delete("csrfSecret");
+    response.cookies.delete("previousPage");
 
     return response;
   } catch (error) {
     console.error("Error during Google callback processing:", error);
     return NextResponse.json(
       { error: "Authentication failed" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

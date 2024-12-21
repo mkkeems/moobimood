@@ -14,3 +14,8 @@ export const signupFormSchema = z.object({
     })
     .regex(/\d/, { message: "Password must contain at least one number" }),
 });
+
+export const signupWithGoogleFormSchema = z.object({
+  username: z.string().trim().min(2, { message: "Username is required" }),
+  email: z.string().trim().email().min(1, { message: "Email is required" }),
+});

@@ -1,5 +1,9 @@
-import Image from "next/image";
+"use client";
 
 export default function Home() {
-  return <div>What's your Moobimood ?</div>;
+  return (
+    <div>
+      <h1>What's your Moobimood ?</h1>
+    </div>
+  );
 }
