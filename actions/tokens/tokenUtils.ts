@@ -1,7 +1,9 @@
+import { config } from "@/config";
 import { isValid } from "date-fns";
 import { EncryptJWT, jwtDecrypt } from "jose";
+import type { JWTPayload } from "jose";
 
-export const secretKey = process.env.SESSION_SECRET;
+export const secretKey = config.SESSION_SECRET;
 
 export async function getEncodedKey() {
   if (!secretKey) {
@@ -13,14 +15,14 @@ export async function getEncodedKey() {
     Buffer.from(secretKey, "base64"),
     { name: "AES-GCM" },
     true,
-    ["encrypt", "decrypt"]
+    ["encrypt", "decrypt"],
   );
 }
 
 export type SessionPayload = {
   email: string;
   expiresAt: Date;
-} & Record<any, any>;
+} & Record<string, unknown>;
 
 export enum TokenTypeEnum {
   accessToken = "accessToken",
@@ -54,7 +56,9 @@ export async function decrypt(session: string | undefined = "") {
   }
 }
 
-export function isSessionPayload(payload: any): payload is SessionPayload {
+export function isSessionPayload(
+  payload: JWTPayload | undefined,
+): payload is SessionPayload {
   return (
     typeof payload === "object" &&
     payload !== null &&

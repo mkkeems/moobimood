@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
 import { decrypt, isSessionPayload } from "@/actions/tokens/tokenUtils";
 import { getUserByEmail } from "@/db/user";
+import { type NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   const accessToken = request.cookies.get("accessToken")?.value;
 
   if (!accessToken) {
@@ -14,7 +14,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
   if (!isSessionPayload(payload)) {
-    return { success: false, error: "Invalid token payload." };
+    return NextResponse.json({
+      success: false,
+      error: "Invalid token payload.",
+    });
   }
 
   const { email: emailToCheck } = payload;

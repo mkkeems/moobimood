@@ -1,12 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
-import csrf from "csrf";
 import { generateNewTokens } from "@/actions/tokens/generateNewTokens";
 import { TokenTypeEnum } from "@/actions/tokens/tokenUtils";
+import { config } from "@/config";
 import { getUserByEmail } from "@/db/user";
+import csrf from "csrf";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 const tokens = new csrf();
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest): Promise<NextResponse> {
   const { searchParams } = new URL(req.url);
   const code = searchParams.get("code");
   const state = searchParams.get("state");
@@ -19,14 +21,18 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    if (!code) {
+      throw new Error("No code provided");
+    }
+
     const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
-        code: code!,
-        client_id: process.env.GOOGLE_CLIENT_ID!,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-        redirect_uri: process.env.GOOGLE_REDIRECT_URI!,
+        code: code,
+        client_id: config.GOOGLE_CLIENT_ID,
+        client_secret: config.GOOGLE_CLIENT_SECRET,
+        redirect_uri: config.GOOGLE_REDIRECT_URI,
         grant_type: "authorization_code",
       }),
     });
@@ -48,7 +54,7 @@ export async function GET(req: NextRequest) {
         headers: {
           Authorization: `Bearer ${tokenData.access_token}`,
         },
-      }
+      },
     );
 
     if (!userInfoResponse.ok) {
@@ -83,7 +89,7 @@ export async function GET(req: NextRequest) {
     console.error("Error during Google callback processing:", error);
     return NextResponse.json(
       { error: "Authentication failed" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
