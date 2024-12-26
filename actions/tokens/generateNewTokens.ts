@@ -1,5 +1,5 @@
 import { getExpiresAt, getMaxAge } from "@/utils/getSessionTime";
-import { encrypt, tokenExpirationTime, TokenTypeEnum } from "./tokenUtils";
+import { type TokenTypeEnum, encrypt, tokenExpirationTime } from "./tokenUtils";
 
 export const generateNewTokens = async ({
   tokenType,
@@ -8,7 +8,7 @@ export const generateNewTokens = async ({
 }: {
   tokenType: TokenTypeEnum;
   email: string;
-} & Record<string, any>) => {
+} & Record<string, unknown>) => {
   const tokenExpiresAt = getExpiresAt(tokenExpirationTime[tokenType]);
 
   const tokenPayload = {

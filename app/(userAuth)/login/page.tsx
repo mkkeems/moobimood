@@ -1,12 +1,12 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { LoginForm } from "./LoginForm";
+import { generateTokensAction } from "@/actions/tokens/generateTokensAction";
 import { useAuthUser } from "@/queries/useAuthUserQuery";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { getDecryptedGoogleAuthToken } from "../signup/getDecryptedGoogleAuthTokenAction";
-import { useQueryClient } from "@tanstack/react-query";
-import { generateTokensAction } from "@/actions/tokens/generateTokensAction";
+import { LoginForm } from "./LoginForm";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -28,17 +28,15 @@ const LoginPage = () => {
       return;
     }
     const fetchGoogleAuthResponse = async () => {
-      const googleAuthResponse = await getDecryptedGoogleAuthToken(
-        googleAuthToken
-      );
+      const googleAuthResponse =
+        await getDecryptedGoogleAuthToken(googleAuthToken);
 
       if (!googleAuthResponse) {
         return;
       }
 
       if (
-        googleAuthResponse &&
-        googleAuthResponse.accountAlreadyExists &&
+        googleAuthResponse?.accountAlreadyExists &&
         googleAuthResponse.email
       ) {
         const { email } = googleAuthResponse;
@@ -53,7 +51,7 @@ const LoginPage = () => {
       }
     };
     fetchGoogleAuthResponse();
-  }, [googleAuthToken]);
+  }, [googleAuthToken, queryClient, router]);
 
   return <LoginForm />;
 };

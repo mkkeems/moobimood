@@ -1,10 +1,10 @@
 "use server";
 
-import { loginFormSchema } from "./loginFormSchema";
-import { LoginFormValues } from "./LoginForm";
 import { getUserByEmail } from "@/db/user";
 import { verifyPassword } from "@/lib/password";
 import { AuthProvider } from "@prisma/client";
+import type { LoginFormValues } from "./LoginForm";
+import { loginFormSchema } from "./loginFormSchema";
 
 type LoginUserActionResult =
   | {
@@ -18,7 +18,7 @@ type LoginUserActionResult =
     };
 
 export const loginUserAction = async (
-  data: LoginFormValues
+  data: LoginFormValues,
 ): Promise<LoginUserActionResult> => {
   const result = loginFormSchema.safeParse(data);
 
@@ -49,7 +49,14 @@ export const loginUserAction = async (
     };
   }
 
-  const isPasswordCorrect = await verifyPassword(passwordInput, password!);
+  if (!password) {
+    return {
+      success: false,
+      error: "Invalid login method",
+    };
+  }
+
+  const isPasswordCorrect = await verifyPassword(passwordInput, password);
 
   if (!isPasswordCorrect) {
     return {

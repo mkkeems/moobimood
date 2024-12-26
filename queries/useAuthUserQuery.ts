@@ -11,7 +11,7 @@ export const useAuthUser = () => {
       return {
         email: authUser.email,
         username: authUser.username,
-        authState: authUser ? true : false,
+        authState: !!authUser,
       };
     },
     staleTime: 1000 * 60 * 5, // 5 minutes

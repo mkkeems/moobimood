@@ -1,41 +1,41 @@
 "use client";
 
+import { generateTokensAction } from "@/actions/tokens/generateTokensAction";
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardContent,
-  CardFooter,
-  CardDescription,
 } from "@/components/ui/card";
 import {
   Form,
+  FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthProvider } from "@prisma/client";
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { DecryptedGoogleAuthTokenResponse } from "./getDecryptedGoogleAuthTokenAction";
+import type { z } from "zod";
+import type { DecryptedGoogleAuthTokenResponse } from "./getDecryptedGoogleAuthTokenAction";
 import { signupWithGoogleFormSchema } from "./signupFormSchema";
 import { signupUserAction } from "./signupUserAction";
-import { generateTokensAction } from "@/actions/tokens/generateTokensAction";
-import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useLayoutEffect, useState } from "react";
 
 export type GoogleSignupFormValues = z.infer<typeof signupWithGoogleFormSchema>;
 
 function isKeyOfSignupFormValues(
-  key: string
+  key: string,
 ): key is keyof GoogleSignupFormValues {
   return key in signupWithGoogleFormSchema.shape;
 }
@@ -62,11 +62,11 @@ const GoogleSignupFinishForm = ({
     return () => {
       clearTimeout(createAccountSuccesstimer);
     };
-  }, [createAccountSuccess]);
+  }, [createAccountSuccess, router]);
 
   useLayoutEffect(() => {
     let accountAlreadyExiststimer: NodeJS.Timeout;
-    if (googleAuthResponse && googleAuthResponse.accountAlreadyExists) {
+    if (googleAuthResponse?.accountAlreadyExists) {
       setAccountAlreadyExists(true);
       const generateTokensForNewUser = async () => {
         await generateTokensAction(googleAuthResponse.email);
@@ -82,7 +82,7 @@ const GoogleSignupFinishForm = ({
     return () => {
       clearTimeout(accountAlreadyExiststimer);
     };
-  }, [googleAuthResponse]);
+  }, [googleAuthResponse, queryClient, router]);
 
   const form = useForm<GoogleSignupFormValues>({
     resolver: zodResolver(signupWithGoogleFormSchema),
@@ -102,7 +102,7 @@ const GoogleSignupFinishForm = ({
         data: { email },
       } = result;
 
-      await generateTokensAction(email);
+      await generateTokensAction(email as string);
       try {
         await generateTokensAction(values.email);
         queryClient.invalidateQueries({ queryKey: ["authUser"] });
@@ -124,7 +124,7 @@ const GoogleSignupFinishForm = ({
                 setFocus(field);
               }
             }
-          }
+          },
         );
       } else {
         if (result.error) {

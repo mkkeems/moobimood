@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useRef, useLayoutEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useLayoutEffect, useRef, useState } from "react";
 import GoogleSignupFinishForm from "./GoogleSignupFinishForm";
 import SignupFormStepOne from "./SignupFormStepOne";
 import {
-  DecryptedGoogleAuthTokenResponse,
+  type DecryptedGoogleAuthTokenResponse,
   getDecryptedGoogleAuthToken,
 } from "./getDecryptedGoogleAuthTokenAction";
-import { useRouter, useSearchParams } from "next/navigation";
 
 const SignupPage = () => {
   const router = useRouter();
@@ -17,7 +17,7 @@ const SignupPage = () => {
   const [googleAuthResponse, setGoogleAuthResponse] =
     useState<DecryptedGoogleAuthTokenResponse>();
   const [expired, setExpired] = useState(false);
-  const [loading, setLoading] = useState(googleAuthToken ? true : false);
+  const [loading, setLoading] = useState(!!googleAuthToken);
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -26,22 +26,19 @@ const SignupPage = () => {
       return;
     }
     const fetchGoogleAuthResponse = async () => {
-      const googleAuthResponse = await getDecryptedGoogleAuthToken(
-        googleAuthToken
-      );
+      const googleAuthResponse =
+        await getDecryptedGoogleAuthToken(googleAuthToken);
 
       if (!googleAuthResponse) {
         return;
       }
 
-      if (
-        googleAuthResponse &&
-        googleAuthResponse.expiresAt &&
-        googleAuthResponse.email
-      ) {
+      if (googleAuthResponse?.expiresAt && googleAuthResponse.email) {
         setGoogleAuthResponse(googleAuthResponse);
         setLoading(false);
-        const expiresAt = new Date(googleAuthResponse.expiresAt).getTime();
+        const expiresAt = new Date(
+          googleAuthResponse.expiresAt as string,
+        ).getTime();
         const now = Date.now();
         const remainingTime = expiresAt - now;
 
@@ -67,7 +64,7 @@ const SignupPage = () => {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [googleAuthToken]);
+  }, [googleAuthToken, router]);
 
   if (!googleAuthToken || expired || !googleAuthResponse) {
     return <SignupFormStepOne />;

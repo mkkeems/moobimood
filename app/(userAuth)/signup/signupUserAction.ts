@@ -1,14 +1,14 @@
 "use server";
 
+import { createUser, getUserByEmail, getUserByUsername } from "@/db/user";
+import { hashPassword } from "@/lib/password";
+import { AuthProvider } from "@prisma/client";
+import type { GoogleSignupFormValues } from "./GoogleSignupFinishForm";
+import type { SignupFormValues } from "./SignupFormStepOne";
 import {
   signupFormSchema,
   signupWithGoogleFormSchema,
 } from "./signupFormSchema";
-import { SignupFormValues } from "./SignupFormStepOne";
-import { GoogleSignupFormValues } from "./GoogleSignupFinishForm";
-import { createUser, getUserByEmail, getUserByUsername } from "@/db/user";
-import { hashPassword } from "@/lib/password";
-import { AuthProvider } from "@prisma/client";
 
 type SignupUserActionResult =
   | {
@@ -20,14 +20,17 @@ type SignupUserActionResult =
     }
   | {
       success: true;
-      data: Record<string, any>;
+      data: Record<string, unknown>;
     };
 
 export const signupUserAction = async (
   data: SignupFormValues | GoogleSignupFormValues,
-  authProvider: AuthProvider
+  authProvider: AuthProvider,
 ): Promise<SignupUserActionResult> => {
-  let result;
+  let result:
+    | ReturnType<typeof signupFormSchema.safeParse>
+    | ReturnType<typeof signupWithGoogleFormSchema.safeParse>
+    | undefined;
   if (authProvider === AuthProvider.BASIC) {
     result = signupFormSchema.safeParse(data);
   } else if (authProvider === AuthProvider.GOOGLE) {

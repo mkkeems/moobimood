@@ -1,4 +1,15 @@
 "use client";
+import { generateTokensAction } from "@/actions/tokens/generateTokensAction";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -8,26 +19,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { loginFormSchema } from "./loginFormSchema";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import Link from "next/link";
-import { loginUserAction } from "./loginUserAction";
-import { generateTokensAction } from "@/actions/tokens/generateTokensAction";
-import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import GoogleSignInButton from "@/components/GoogleSignInButton";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import type { z } from "zod";
+import { loginFormSchema } from "./loginFormSchema";
+import { loginUserAction } from "./loginUserAction";
 
 export type LoginFormValues = z.infer<typeof loginFormSchema>;
 
@@ -75,7 +75,7 @@ export const LoginForm = () => {
                 setFocus(field);
               }
             }
-          }
+          },
         );
       } else {
         if (result.error) {

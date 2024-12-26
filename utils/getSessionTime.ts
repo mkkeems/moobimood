@@ -1,9 +1,9 @@
-import { addMinutes, addHours, addDays } from "date-fns";
+import { addDays, addHours, addMinutes } from "date-fns";
 
 // expTime looks like "15m", "7h", "30d" etc
 export const getExpiresAt = (expTime: string): Date => {
   const timeUnit = expTime.slice(-1);
-  const timeValue = parseInt(expTime.slice(0, -1), 10);
+  const timeValue = Number.parseInt(expTime.slice(0, -1), 10);
 
   switch (timeUnit) {
     case "m":
@@ -19,7 +19,7 @@ export const getExpiresAt = (expTime: string): Date => {
 
 export const getMaxAge = (expTime: string): number => {
   const timeUnit = expTime.slice(-1);
-  const timeValue = parseInt(expTime.slice(0, -1), 10);
+  const timeValue = Number.parseInt(expTime.slice(0, -1), 10);
 
   switch (timeUnit) {
     case "m":

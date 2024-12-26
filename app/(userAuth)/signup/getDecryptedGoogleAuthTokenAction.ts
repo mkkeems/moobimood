@@ -7,11 +7,11 @@ export type DecryptedGoogleAuthTokenResponse =
   | ({
       email: string;
       accountAlreadyExists: boolean;
-    } & Record<string, any>)
+    } & Record<string, unknown>)
   | undefined;
 
 export const getDecryptedGoogleAuthToken = async (
-  googleAuthSuccess?: string
+  googleAuthSuccess?: string,
 ): Promise<DecryptedGoogleAuthTokenResponse> => {
   const tempToken = googleAuthSuccess;
   if (!tempToken) return undefined;
