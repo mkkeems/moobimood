@@ -1,6 +1,6 @@
-import { Button } from "./ui/button";
-import { Icons } from "./icons";
 import queryString from "query-string";
+import { Icons } from "./icons";
+import { Button } from "./ui/button";
 
 export const GoogleSignInButton = ({ nextPath }: { nextPath?: string }) => {
   const handleGoogleSignIn = async () => {

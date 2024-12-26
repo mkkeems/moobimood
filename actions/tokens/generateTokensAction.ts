@@ -1,8 +1,8 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { TokenTypeEnum } from "./tokenUtils";
 import { generateNewTokens } from "./generateNewTokens";
+import { TokenTypeEnum } from "./tokenUtils";
 
 export async function generateTokensAction(email: string) {
   console.log("getting them new new tokens yeaaaa");

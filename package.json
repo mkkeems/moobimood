@@ -15,7 +15,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": ["biome check --write"]
+    "*.{js,jsx,ts,tsx}": ["biome check --fix"]
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

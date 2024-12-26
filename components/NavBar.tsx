@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-import Link from "next/link";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -11,6 +9,8 @@ import {
 } from "@/components/ui/navigation-menu";
 import { useAuthUser } from "@/queries/useAuthUserQuery";
 import { useLogout } from "@/queries/useLogoutMutation";
+import Link from "next/link";
+import * as React from "react";
 
 export function NavBar() {
   const { data: authUser, isLoading, isError, status } = useAuthUser();

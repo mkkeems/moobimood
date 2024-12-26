@@ -57,7 +57,7 @@ const SignupFormStepOne = () => {
         data: { email },
       } = result;
 
-      await generateTokensAction(email);
+      await generateTokensAction(email as string);
       try {
         await generateTokensAction(values.email);
         queryClient.invalidateQueries({ queryKey: ["authUser"] });

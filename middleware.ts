@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { decrypt } from "./actions/tokens/tokenUtils";
+import { type NextRequest, NextResponse } from "next/server";
 import { refreshTokensAction } from "./actions/tokens/refreshTokensAction";
+import { decrypt } from "./actions/tokens/tokenUtils";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
