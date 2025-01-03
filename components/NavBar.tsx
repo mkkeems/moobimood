@@ -30,6 +30,7 @@ export function NavBar() {
             </Link>
           </NavigationMenuItem>
         </div>
+        {authUser && <div>Hello, {authUser?.username}</div>}
         <div>
           {!authUser ? (
             <NavigationMenuList>
