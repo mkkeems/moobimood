@@ -5,6 +5,11 @@ export type TmdbListResponse<T> = {
   total_pages: number;
 };
 
+export type TmdbMultiListResponseType =
+  | MovieWithMediaType
+  | TvSeriesWithMediaType
+  | PersonWithMediaType;
+
 export type MediaType = "tv" | "movie" | "person";
 
 export type WithMediaType<T, K extends MediaType> = T & {

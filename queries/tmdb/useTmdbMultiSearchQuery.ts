@@ -1,10 +1,8 @@
 import { tmdbApiPaths } from "@/lib/tmdb/apiConfig";
 import { tmdbFetcher } from "@/lib/tmdb/tmdbFetcher";
 import type {
-  MovieWithMediaType,
-  PersonWithMediaType,
   TmdbListResponse,
-  TvSeriesWithMediaType,
+  TmdbMultiListResponseType,
 } from "@/lib/tmdb/tmdbTypes";
 import { useQuery } from "@tanstack/react-query";
 
@@ -13,9 +11,7 @@ export const useTmdbMultiSearchQuery = (searchKeyword: string) => {
     queryKey: ["search", searchKeyword],
     queryFn: async () => {
       const response = await tmdbFetcher<
-        TmdbListResponse<
-          MovieWithMediaType | TvSeriesWithMediaType | PersonWithMediaType
-        >
+        TmdbListResponse<TmdbMultiListResponseType>
       >(tmdbApiPaths.multiSearch, {
         queryParams: { query: searchKeyword },
       });
@@ -23,6 +19,7 @@ export const useTmdbMultiSearchQuery = (searchKeyword: string) => {
       return response;
     },
     enabled: !!searchKeyword,
-    staleTime: 1000,
+    staleTime: 1000 * 60,
+    gcTime: 1000 * 60 * 5,
   });
 };

@@ -1,12 +1,12 @@
 "use client";
 
-import SearchBar from "@/components/SearchBar";
+import { CommandSearch } from "@/components/CommandSearch";
 
 export default function Home() {
   return (
     <div>
       <h1>What's your Moobimood ?</h1>
-      <SearchBar />
+      <CommandSearch />
     </div>
   );
 }
