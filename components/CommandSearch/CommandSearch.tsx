@@ -17,6 +17,8 @@ import type {
 import { useTmdbMultiSearchQuery } from "@/queries/tmdb/useTmdbMultiSearchQuery";
 import React, { useEffect, useState } from "react";
 import CommandSearchButton from "./CommandSearchButton";
+import CommandSearchGroup from "./CommandSearchGroup";
+import CommandSearchItem from "./CommandSearchItem";
 
 export const CommandSearch = () => {
   const [open, setOpen] = useState(false);
@@ -50,13 +52,10 @@ export const CommandSearch = () => {
     (acc, result) => {
       if (result.media_type === "movie") {
         acc.movies = [...acc.movies, result].slice(0, 10);
-        // .sort((a, b) => a.title.localeCompare(b.title));
       } else if (result.media_type === "tv") {
         acc.tvSeries = [...acc.tvSeries, result].slice(0, 10);
-        // .sort((a, b) => a.name.localeCompare(b.name));
       } else if (result.media_type === "person") {
         acc.people = [...acc.people, result].slice(0, 10);
-        // .sort((a, b) => a.name.localeCompare(b.name));
       }
       return acc;
     },
@@ -65,6 +64,9 @@ export const CommandSearch = () => {
 
   const hasResults = data?.results.length;
 
+  console.log({ hasResults, movies, tvSeries, people });
+
+  console.log(movies.length > 0, tvSeries.length > 0, people.length > 0);
   return (
     <>
       <CommandSearchButton onClick={() => setOpen(true)} />
@@ -77,25 +79,33 @@ export const CommandSearch = () => {
           {hasResults && (
             <>
               {movies.length > 0 && (
-                <CommandGroup heading="Movies">
+                <CommandSearchGroup heading="Movies">
                   {movies.map((movie) => (
-                    <CommandItem key={movie.id}>{movie.title}</CommandItem>
+                    <CommandSearchItem
+                      item={movie}
+                      key={`search-movie-${movie.id}`}
+                    />
                   ))}
-                </CommandGroup>
+                </CommandSearchGroup>
               )}
+
               {tvSeries.length > 0 && (
-                <CommandGroup heading="TV Shows">
+                <CommandSearchGroup heading="TV Shows">
                   {tvSeries.map((tv) => (
-                    <CommandItem key={tv.id}>{tv.name}</CommandItem>
+                    <CommandSearchItem item={tv} key={`search-tv-${tv.id}`} />
                   ))}
-                </CommandGroup>
+                </CommandSearchGroup>
               )}
+
               {people.length > 0 && (
-                <CommandGroup heading="People">
+                <CommandSearchGroup heading="People">
                   {people.map((person) => (
-                    <CommandItem key={person.id}>{person.name}</CommandItem>
+                    <CommandSearchItem
+                      item={person}
+                      key={`search-person-${person.id}`}
+                    />
                   ))}
-                </CommandGroup>
+                </CommandSearchGroup>
               )}
             </>
           )}

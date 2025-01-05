@@ -1,3 +1,14 @@
+const createTypeGuard = <T extends TmdbMultiListResponseType>(
+  type: T["media_type"],
+) => {
+  return (item: TmdbMultiListResponseType): item is T =>
+    item.media_type === type;
+};
+
+export const isMovie = createTypeGuard<MovieWithMediaType>("movie");
+export const isTvSeries = createTypeGuard<TvSeriesWithMediaType>("tv");
+export const isPerson = createTypeGuard<PersonWithMediaType>("person");
+
 export type TmdbListResponse<T> = {
   page: number;
   results: T[];
