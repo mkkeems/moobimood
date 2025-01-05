@@ -64,9 +64,8 @@ export const CommandSearch = () => {
 
   const hasResults = data?.results.length;
 
-  console.log({ hasResults, movies, tvSeries, people });
+  // console.log({ hasResults, movies, tvSeries, people });
 
-  console.log(movies.length > 0, tvSeries.length > 0, people.length > 0);
   return (
     <>
       <CommandSearchButton onClick={() => setOpen(true)} />

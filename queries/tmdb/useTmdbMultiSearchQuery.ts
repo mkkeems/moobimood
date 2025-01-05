@@ -19,7 +19,7 @@ export const useTmdbMultiSearchQuery = (searchKeyword: string) => {
       return response;
     },
     enabled: !!searchKeyword,
-    staleTime: 1000 * 60,
-    gcTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 15,
   });
 };

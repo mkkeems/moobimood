@@ -15,7 +15,7 @@ const CommandSearchButton = ({ onClick }: CommandSearchButtonProps) => {
     >
       <Search size={16} />
       Search
-      <div className="hidden lg:flex items-center gap-1 rounded-md bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
+      <div className="flex items-center gap-1 rounded-md bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
         <CommandIcon size={12} />K
       </div>
     </Button>
